@@ -13,34 +13,36 @@
   --color-text-secondary: #666666;
   --color-accent: #8b0000; /* Stanford cardinal */
   --color-icon: #888888;
-  
+
   /* Typography */
-  --font-primary: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  --font-display: 'Georgia', serif;
-  
+  --font-primary: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display: "Georgia", serif;
+
   /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 1.5rem;
   --spacing-lg: 2rem;
   --spacing-xl: 3rem;
-  
+
   /* Border Radius */
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-full: 50%;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-  
+
   /* Header */
   --header-height: 64px;
 }
 
 /* Reset & Base */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -108,10 +110,9 @@ button {
 
 /* Page Titles */
 .page-title {
-  font-family: var(--font-display);
+  font-family: var(--font-primary);
   font-size: 2.5rem;
-  font-weight: 400;
-  font-style: italic;
+  font-weight: 500;
   text-align: center;
   margin-bottom: var(--spacing-xl);
   color: var(--color-text-primary);
@@ -147,11 +148,10 @@ button {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
-  color: var(--color-accent);
+  color: var(--color-text-primary);
   font-weight: 500;
 }
 
 .back-link:hover {
   text-decoration: underline;
 }
-

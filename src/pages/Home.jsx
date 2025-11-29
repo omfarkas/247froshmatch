@@ -1,4 +1,4 @@
-import DashboardCard from '../components/DashboardCard'
+import DashboardCard from "../components/DashboardCard";
 
 // Icons matching the wireframe
 const RoommateIcon = () => (
@@ -13,69 +13,117 @@ const RoommateIcon = () => (
     <circle cx="115" cy="70" r="18" />
     <ellipse cx="115" cy="110" rx="28" ry="20" />
   </svg>
-)
+);
 
 const ReviewIcon = () => (
   <svg viewBox="0 0 180 140" fill="currentColor">
     {/* Three match cards arranged in a pattern */}
     <g transform="translate(20, 10)">
-      <rect x="0" y="0" width="55" height="45" rx="6" fill="none" stroke="currentColor" strokeWidth="3"/>
-      <circle cx="18" cy="22" r="10"/>
-      <circle cx="38" cy="22" r="10"/>
-      <line x1="28" y1="10" x2="28" y2="35" stroke="currentColor" strokeWidth="2"/>
+      <rect
+        x="0"
+        y="0"
+        width="55"
+        height="45"
+        rx="6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+      />
+      <circle cx="18" cy="22" r="10" />
+      <circle cx="38" cy="22" r="10" />
+      <line
+        x1="28"
+        y1="10"
+        x2="28"
+        y2="35"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
     </g>
     <g transform="translate(90, 30)">
-      <rect x="0" y="0" width="55" height="45" rx="6" fill="none" stroke="currentColor" strokeWidth="3"/>
-      <circle cx="18" cy="22" r="10"/>
-      <circle cx="38" cy="22" r="10"/>
-      <line x1="28" y1="10" x2="28" y2="35" stroke="currentColor" strokeWidth="2"/>
+      <rect
+        x="0"
+        y="0"
+        width="55"
+        height="45"
+        rx="6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+      />
+      <circle cx="18" cy="22" r="10" />
+      <circle cx="38" cy="22" r="10" />
+      <line
+        x1="28"
+        y1="10"
+        x2="28"
+        y2="35"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
     </g>
     <g transform="translate(20, 80)">
-      <rect x="0" y="0" width="55" height="45" rx="6" fill="none" stroke="currentColor" strokeWidth="3"/>
-      <circle cx="18" cy="22" r="10"/>
-      <circle cx="38" cy="22" r="10"/>
-      <line x1="28" y1="10" x2="28" y2="35" stroke="currentColor" strokeWidth="2"/>
+      <rect
+        x="0"
+        y="0"
+        width="55"
+        height="45"
+        rx="6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+      />
+      <circle cx="18" cy="22" r="10" />
+      <circle cx="38" cy="22" r="10" />
+      <line
+        x1="28"
+        y1="10"
+        x2="28"
+        y2="35"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
     </g>
   </svg>
-)
+);
 
 const DormIcon = () => (
   <svg viewBox="0 0 180 120" fill="currentColor">
     {/* Empty/minimal - dorm matching shows less visual in wireframe */}
   </svg>
-)
+);
 
 // Demo data - these numbers match the wireframe
 const DEMO_DATA = {
   roommate: { current: 900, total: 1800 },
   review: { current: 200, total: 900 },
-  dorm: { current: 120, total: 200 }
-}
+  dorm: { current: 120, total: 200 },
+};
 
 function Home() {
   return (
     <div className="home-page">
-      <h1 className="page-title">Welcome Back, Russel</h1>
-      
+      <h1 className="page-title">Welcome back, Resident Director</h1>
+
       <div className="card-grid">
         <DashboardCard
-          title="roommate match"
+          title="Roommate Matching"
           icon={<RoommateIcon />}
           current={DEMO_DATA.roommate.current}
           total={DEMO_DATA.roommate.total}
           to="/roommate"
         />
-        
+
         <DashboardCard
-          title="review matches"
+          title="Match Review"
           icon={<ReviewIcon />}
           current={DEMO_DATA.review.current}
           total={DEMO_DATA.review.total}
           to="/review"
         />
-        
+
         <DashboardCard
-          title="dorm match"
+          title="Dorm Assignment"
           icon={<DormIcon />}
           current={DEMO_DATA.dorm.current}
           total={DEMO_DATA.dorm.total}
@@ -83,8 +131,7 @@ function Home() {
         />
       </div>
     </div>
-  )
+  );
 }
 
-export default Home
-
+export default Home;

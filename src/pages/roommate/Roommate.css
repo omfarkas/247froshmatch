@@ -1,0 +1,217 @@
+/* Roommate Page Layout */
+.roommate-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  padding-bottom: var(--spacing-md);
+}
+
+.roommate-page .back-link {
+  position: fixed;
+  top: calc(var(--header-height) + var(--spacing-xs));
+  left: var(--spacing-lg);
+}
+
+/* Header */
+.roommate-header {
+  text-align: center;
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.roommate-header h1 {
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.roommate-header p {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+}
+
+/* Cards Container */
+.roommate-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+@media (max-width: 700px) {
+  .roommate-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Student Card */
+.student-card {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: calc(var(--spacing-md) + 2rem);
+}
+
+.student-header {
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.student-name {
+  font-family: var(--font-primary);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+
+.student-location {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
+/* Sections */
+.student-section {
+  margin-bottom: var(--spacing-md);
+}
+
+.section-title {
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.section-content-wrapper {
+  position: relative;
+}
+
+.section-content {
+  background: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  height: 140px;
+  overflow-y: auto;
+}
+
+.section-content-wrapper::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, var(--color-surface-alt));
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.section-content-wrapper.at-bottom::after {
+  opacity: 0;
+}
+
+/* See More */
+.see-more-btn {
+  position: absolute;
+  bottom: var(--spacing-md);
+  right: var(--spacing-md);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  padding: var(--spacing-xs) 0;
+}
+
+.see-more-btn:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+/* Action Buttons */
+.roommate-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.action-btn-row {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.action-btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+  min-width: 140px;
+  text-align: center;
+}
+
+.action-btn:hover {
+  border-color: var(--color-text-secondary);
+}
+
+.action-btn--reject:hover {
+  background: var(--color-surface-alt);
+}
+
+.action-btn--approve:hover {
+  background: var(--color-text-primary);
+  color: var(--color-surface);
+  border-color: var(--color-text-primary);
+}
+
+/* Skip Button */
+.skip-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.9rem;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+}
+
+.skip-btn:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+/* Finished State */
+.roommate-finished {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.finished-content {
+  text-align: center;
+}
+
+.finished-content h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.finished-content .back-link {
+  position: static;
+  display: inline-block;
+}

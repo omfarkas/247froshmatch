@@ -27,4 +27,3 @@ function ReviewIndex() {
 }
 
 export default ReviewIndex
-
