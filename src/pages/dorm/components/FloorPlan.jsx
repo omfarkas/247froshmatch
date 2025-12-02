@@ -1,10 +1,23 @@
 import './FloorPlan.css';
 
-function FloorPlan({ floor, selectedRoom, selectedIssue, onRoomClick }) {
+function FloorPlan({ floor, issues = [], selectedRoom, selectedIssue, onRoomClick, onIssueClick }) {
   const isRoomHighlighted = (roomId) => {
     if (selectedRoom?.id === roomId) return 'selected';
     if (selectedIssue?.affectedRooms?.includes(roomId)) return 'issue';
     return '';
+  };
+
+  const getIssuePosition = (issue) => {
+    if (!issue.affectedRooms || issue.affectedRooms.length === 0) return null;
+    // Find the first affected room to position the icon
+    const room = floor.rooms.find(r => r.id === issue.affectedRooms[0]);
+    if (!room) return null;
+    
+    // Position slightly offset from the room center to be visible
+    return {
+      x: room.position.x + 15,
+      y: room.position.y + 15
+    };
   };
 
   return (
@@ -76,6 +89,39 @@ function FloorPlan({ floor, selectedRoom, selectedIssue, onRoomClick }) {
                   pointerEvents="none"
                 >
                   {room.id}
+                </text>
+              </g>
+            );
+          })}
+
+          {/* Issue Icons */}
+          {issues.map((issue, index) => {
+            const pos = getIssuePosition(issue);
+            if (!pos) return null;
+            const isSelected = selectedIssue?.id === issue.id;
+            
+            return (
+              <g 
+                key={issue.id} 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onIssueClick(issue);
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <circle
+                  cx={pos.x + 30}
+                  cy={pos.y + 30}
+                  r="12"
+                  className={`issue-icon-bg ${isSelected ? 'selected' : ''}`}
+                />
+                <text
+                  x={pos.x + 30}
+                  y={pos.y + 34}
+                  textAnchor="middle"
+                  className={`issue-icon-text ${isSelected ? 'selected' : ''}`}
+                >
+                  {index + 1}
                 </text>
               </g>
             );

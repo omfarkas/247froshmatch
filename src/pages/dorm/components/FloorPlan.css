@@ -77,3 +77,32 @@
   color: var(--color-text-secondary);
   font-weight: 500;
 }
+
+/* Issue Icons */
+.issue-icon-bg {
+  fill: var(--color-surface);
+  stroke: var(--color-text-secondary);
+  stroke-width: 2;
+  transition: all 0.2s ease;
+}
+
+.issue-icon-bg.selected {
+  fill: var(--color-text-secondary);
+  stroke: var(--color-text-primary);
+}
+
+.issue-icon-text {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.issue-icon-text.selected {
+  fill: var(--color-surface);
+}
+
+g:hover .issue-icon-bg {
+  stroke: var(--color-text-primary);
+  stroke-width: 2.5;
+}

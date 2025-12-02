@@ -259,9 +259,11 @@ function DormAssignment() {
 
           <FloorPlan
             floor={currentFloor}
+            issues={currentFloorIssues}
             selectedRoom={selectedRoom}
             selectedIssue={selectedIssue}
             onRoomClick={handleRoomClick}
+            onIssueClick={handleIssueClick}
           />
 
           <IssueList
