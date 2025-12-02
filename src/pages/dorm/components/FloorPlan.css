@@ -1,0 +1,79 @@
+.floor-plan-container {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+}
+
+.floor-plan-label {
+  margin-bottom: var(--spacing-sm);
+}
+
+.area-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.floor-plan-wrapper {
+  position: relative;
+}
+
+.floor-plan {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #fafafa;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+}
+
+.room {
+  fill: var(--color-surface);
+  stroke: var(--color-border);
+  stroke-width: 2;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.room:hover {
+  fill: var(--color-surface-alt);
+  stroke: var(--color-text-primary);
+  stroke-width: 2.5;
+}
+
+.room.selected {
+  fill: var(--color-surface-alt);
+  stroke: var(--color-text-primary);
+  stroke-width: 3;
+}
+
+.room.issue {
+  fill: #f5f5f5;
+  stroke: var(--color-text-secondary);
+  stroke-width: 2.5;
+  animation: pulse-issue 2s ease-in-out infinite;
+}
+
+@keyframes pulse-issue {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.floor-plan-footer {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.floor-label {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
