@@ -105,21 +105,26 @@ function FloorPlan({ floor, issues = [], selectedRoom, selectedIssue, onRoomClic
             const highlight = isRoomHighlighted(room.id);
             const dynamicStyle = getRoomStyle(room);
             
+            // Determine room dimensions based on zone
+            const isVerticalWing = room.zone === 'West Wing' || room.zone === 'East Wing';
+            const width = isVerticalWing ? 25 : 50;
+            const height = isVerticalWing ? 50 : 25;
+            
             return (
               <g key={room.id} className={`room-group ${highlight}`}>
                 <rect
                   x={room.position.x}
                   y={room.position.y}
-                  width="50"
-                  height="50"
+                  width={width}
+                  height={height}
                   className={`room ${highlight}`}
                   onClick={() => onRoomClick(room)}
                   rx="4"
                   style={dynamicStyle}
                 />
                 <text
-                  x={room.position.x + 25}
-                  y={room.position.y + 30}
+                  x={room.position.x + width/2}
+                  y={room.position.y + height/2 + 4}
                   textAnchor="middle"
                   fontSize="10"
                   fill={activeLens !== 'none' && getRoomStyle(room).fill && parseInt(getRoomStyle(room).fill.split(',')[2]) < 60 ? 'white' : 'var(--color-text-primary)'}
