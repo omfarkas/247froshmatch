@@ -77,129 +77,70 @@
 /* Modal Content */
 .modal-content {
   overflow-y: auto;
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   flex: 1;
 }
 
 /* Category Section */
 .modal-category {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
 }
 
 .modal-category:last-child {
   margin-bottom: 0;
 }
 
-.modal-category-header {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-xs) 0;
-  padding-bottom: var(--spacing-xs);
-  margin-bottom: var(--spacing-sm);
-  border: none;
-  border-bottom: 1px solid var(--color-border);
-  background: transparent;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.modal-category-header:hover {
-  opacity: 0.7;
-}
-
-.modal-category-header.collapsed {
-  margin-bottom: 0;
-}
-
 .modal-category-title {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--color-text-secondary);
-  margin: 0;
+  margin: 0 0 var(--spacing-md) 0;
+  text-align: center;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
 }
 
-.modal-category-chevron {
-  font-size: 2.5rem;
-  color: var(--color-text-secondary);
-  line-height: 0.5;
-}
-
-/* Rows */
-.modal-rows {
+/* Field Cards List */
+.field-cards-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-}
-
-.modal-row {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
   gap: var(--spacing-sm);
-  padding: var(--spacing-xs) 0;
-  align-items: start;
 }
 
-.modal-row:nth-child(odd) {
+/* Field Card */
+.field-card {
   background: var(--color-surface-alt);
-  border-radius: var(--radius-sm);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  margin: 0 calc(-1 * var(--spacing-sm));
-}
-
-/* Cells */
-.modal-cell {
-  font-size: 0.9rem;
-}
-
-.modal-cell-label {
-  text-align: center;
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  font-size: 0.85rem;
-  min-width: 160px;
-}
-
-.modal-cell-value {
-  color: var(--color-text-primary);
-  line-height: 1.4;
-}
-
-.modal-cell-value:first-child {
-  text-align: right;
-}
-
-.modal-cell-value:last-child {
-  text-align: left;
-}
-
-/* Written Responses */
-.modal-category-written {
-  margin-top: var(--spacing-lg);
-}
-
-.modal-written-responses {
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   gap: var(--spacing-md);
+  align-items: center;
 }
 
-.modal-written-text {
-  font-size: 0.9rem;
-  line-height: 1.6;
+.field-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.field-value {
+  font-size: 0.95rem;
   color: var(--color-text-primary);
-  background: var(--color-surface-alt);
-  padding: var(--spacing-sm);
-  border-radius: var(--radius-md);
+  word-break: break-word;
 }
 
-.modal-written-divider {
-  width: 1px;
-  background: var(--color-border);
-  margin: 0 var(--spacing-xs);
+.field-value:first-child {
+  text-align: right;
+}
+
+.field-value:last-child {
+  text-align: left;
 }
 
 /* Responsive */
@@ -216,19 +157,14 @@
     font-size: 1.1rem;
   }
   
-  .modal-row {
+  .field-card {
     grid-template-columns: 1fr;
     gap: var(--spacing-xs);
-    padding: var(--spacing-sm) 0;
+    text-align: center;
   }
   
-  .modal-cell-label {
-    text-align: left;
-    font-size: 0.75rem;
-  }
-  
-  .modal-cell-value {
-    text-align: left !important;
+  .field-value:first-child,
+  .field-value:last-child {
+    text-align: center;
   }
 }
-
