@@ -15,7 +15,7 @@
 /* Header */
 .roommate-header {
   text-align: center;
-  margin-top: var(--spacing-md);
+  margin-top: 0;
   margin-bottom: var(--spacing-md);
 }
 
@@ -29,6 +29,27 @@
 
 .roommate-header p {
   font-size: 1.1rem;
+  color: var(--color-text-secondary);
+}
+
+.roommate-subheader {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+.see-all-info-btn {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.see-all-info-btn:hover {
   color: var(--color-text-secondary);
 }
 
@@ -54,8 +75,6 @@
   padding: var(--spacing-md);
   display: flex;
   flex-direction: column;
-  position: relative;
-  padding-bottom: calc(var(--spacing-md) + 2rem);
 }
 
 .student-header {
@@ -120,21 +139,6 @@
 
 .section-content-wrapper.at-bottom::after {
   opacity: 0;
-}
-
-/* See More */
-.see-more-btn {
-  position: absolute;
-  bottom: var(--spacing-md);
-  right: var(--spacing-md);
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-  padding: var(--spacing-xs) 0;
-}
-
-.see-more-btn:hover {
-  color: var(--color-text-primary);
-  text-decoration: underline;
 }
 
 /* Action Buttons */
@@ -214,4 +218,69 @@
 .finished-content .back-link {
   position: static;
   display: inline-block;
+}
+
+/* Progress Section */
+.progress-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-lg);
+}
+
+.progress-bar {
+  width: 200px;
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-text-secondary);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+/* Student Column (card + notes) */
+.student-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Notes Section */
+.student-notes {
+  display: flex;
+  flex-direction: column;
+}
+
+.notes-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: var(--spacing-sm);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  resize: vertical;
+}
+
+.notes-textarea:focus {
+  outline: none;
+  border-color: var(--color-text-secondary);
+}
+
+.notes-textarea::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.6;
 }
