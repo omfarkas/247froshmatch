@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import FloorPlan from './components/FloorPlan';
 import IssuePanel from './components/IssuePanel';
-import IssueList from './components/IssueList';
 import './DormAssignment.css';
 
 // Mock data for floors and rooms
@@ -9,91 +8,62 @@ const MOCK_FLOORS = [
   {
     id: 1,
     name: 'Floor 1',
-    label: 'Staircase Area',
+    label: 'Main Floor',
+    width: 870,
+    height: 420,
     rooms: [
-      { id: 101, position: { x: 10, y: 10 }, students: ['Emma Chen', 'Sofia Rodriguez'], preferences: { social: 8, quiet: 3, interests: ['Soccer', 'Photography', 'Debate'] } },
-      { id: 102, position: { x: 10, y: 80 }, students: ['Marcus Johnson', 'Aiden Park'], preferences: { social: 9, quiet: 2, interests: ['Basketball', 'Gaming', 'Music Production'] } },
-      { id: 103, position: { x: 10, y: 150 }, students: ['Olivia Martinez', 'Zoe Kim'], preferences: { social: 4, quiet: 8, interests: ['Reading', 'Art', 'Coding'] } },
-      { id: 104, position: { x: 10, y: 220 }, students: ['Liam O\'Brien', 'Noah Williams'], preferences: { social: 7, quiet: 5, interests: ['Soccer', 'Film', 'Cooking'] } },
-      { id: 105, position: { x: 10, y: 290 }, students: ['Ava Thompson', 'Mia Davis'], preferences: { social: 6, quiet: 6, interests: ['Dance', 'Writing', 'Volunteering'] } },
-      
-      // Top row
-      { id: 106, position: { x: 80, y: 10 }, students: ['Ethan Garcia', 'Lucas Anderson'], preferences: { social: 8, quiet: 4, interests: ['Soccer', 'Robotics', 'Chess'] } },
-      { id: 107, position: { x: 150, y: 10 }, students: ['Isabella Lee', 'Charlotte Brown'], preferences: { social: 5, quiet: 7, interests: ['Piano', 'Science', 'Hiking'] } },
-      { id: 108, position: { x: 220, y: 10 }, students: ['James Wilson', 'Benjamin Taylor'], preferences: { social: 9, quiet: 3, interests: ['Soccer', 'Theater', 'Debate'] } },
-      
-      // Right column
-      { id: 109, position: { x: 290, y: 10 }, students: ['Amelia Moore', 'Harper Jackson'], preferences: { social: 3, quiet: 9, interests: ['Meditation', 'Yoga', 'Poetry'] } },
-      { id: 110, position: { x: 290, y: 80 }, students: ['Daniel Martinez', 'Matthew White'], preferences: { social: 7, quiet: 5, interests: ['Basketball', 'Gaming', 'Coding'] } },
-      { id: 111, position: { x: 290, y: 150 }, students: ['Emily Harris', 'Abigail Clark'], preferences: { social: 6, quiet: 6, interests: ['Swimming', 'Art', 'Music'] } },
-      { id: 112, position: { x: 290, y: 220 }, students: ['Michael Lewis', 'Alexander Hall'], preferences: { social: 8, quiet: 4, interests: ['Soccer', 'Entrepreneurship', 'Travel'] } },
-      
-      // Bottom row
-      { id: 113, position: { x: 220, y: 290 }, students: ['Sophia Allen', 'Ella Young'], preferences: { social: 5, quiet: 7, interests: ['Reading', 'Baking', 'Languages'] } },
-      { id: 114, position: { x: 150, y: 290 }, students: ['William King', 'Henry Wright'], preferences: { social: 9, quiet: 2, interests: ['Soccer', 'Party Planning', 'Social Media'] } },
-      { id: 115, position: { x: 80, y: 290 }, students: ['Grace Lopez', 'Chloe Hill'], preferences: { social: 4, quiet: 8, interests: ['Astronomy', 'Painting', 'Classical Music'] } },
+      // Top horizontal section (20 rooms across - doubled)
+      { id: 101, zone: 'North Hall', position: { x: 140, y: 20 }, students: ['Emma Chen', 'Sofia Rodriguez'], preferences: { social: 8, quiet: 3, sleep: 'late', interests: ['Soccer', 'Photography'], varsity: true } },
+      { id: 102, zone: 'North Hall', position: { x: 200, y: 20 }, students: ['Marcus Johnson', 'Aiden Park'], preferences: { social: 9, quiet: 2, sleep: 'late', interests: ['Basketball', 'Gaming'], varsity: true } },
+      { id: 103, zone: 'North Hall', position: { x: 260, y: 20 }, students: ['Olivia Martinez', 'Zoe Kim'], preferences: { social: 4, quiet: 8, sleep: 'early', interests: ['Reading', 'Art'], varsity: false } },
+      { id: 104, zone: 'North Hall', position: { x: 320, y: 20 }, students: ['Liam O\'Brien', 'Noah Williams'], preferences: { social: 7, quiet: 5, sleep: 'mixed', interests: ['Soccer', 'Film'], varsity: true } },
+      { id: 105, zone: 'North Hall', position: { x: 380, y: 20 }, students: ['Ava Thompson', 'Mia Davis'], preferences: { social: 6, quiet: 6, sleep: 'early', interests: ['Dance', 'Writing'], varsity: false } },
+      { id: 106, zone: 'North Hall', position: { x: 440, y: 20 }, students: ['Ethan Garcia', 'Lucas Anderson'], preferences: { social: 8, quiet: 4, sleep: 'late', interests: ['Soccer', 'Robotics'], varsity: true } },
+      { id: 107, zone: 'North Hall', position: { x: 500, y: 20 }, students: ['Isabella Lee', 'Charlotte Brown'], preferences: { social: 5, quiet: 7, sleep: 'early', interests: ['Piano', 'Science'], varsity: false } },
+      { id: 108, zone: 'North Hall', position: { x: 560, y: 20 }, students: ['James Wilson', 'Benjamin Taylor'], preferences: { social: 9, quiet: 3, sleep: 'late', interests: ['Soccer', 'Theater'], varsity: true } },
+      { id: 109, zone: 'North Hall', position: { x: 620, y: 20 }, students: ['Amelia Moore', 'Harper Jackson'], preferences: { social: 3, quiet: 9, sleep: 'early', interests: ['Meditation', 'Yoga'], varsity: false } },
+      { id: 110, zone: 'North Hall', position: { x: 680, y: 20 }, students: ['Daniel Martinez', 'Matthew White'], preferences: { social: 7, quiet: 5, sleep: 'mixed', interests: ['Basketball', 'Gaming'], varsity: false } },
+      // Second row of top section
+      { id: 151, zone: 'North Hall', position: { x: 140, y: 80 }, students: ['Elijah Ward', 'Sebastian Torres'], preferences: { social: 7, quiet: 5, sleep: 'late', interests: ['Basketball', 'Music Production'], varsity: false } },
+      { id: 152, zone: 'North Hall', position: { x: 200, y: 80 }, students: ['Nora Peterson', 'Hazel Gray'], preferences: { social: 5, quiet: 7, sleep: 'early', interests: ['Reading', 'Tea'], varsity: false } },
+      { id: 153, zone: 'North Hall', position: { x: 260, y: 80 }, students: ['Carter Ramirez', 'Wyatt James'], preferences: { social: 8, quiet: 4, sleep: 'late', interests: ['Soccer', 'Entrepreneurship'], varsity: true } },
+      { id: 154, zone: 'North Hall', position: { x: 320, y: 80 }, students: ['Aubrey Watson', 'Brooklyn Brooks'], preferences: { social: 6, quiet: 6, sleep: 'mixed', interests: ['Dance', 'Fashion Design'], varsity: false } },
+      { id: 155, zone: 'North Hall', position: { x: 380, y: 80 }, students: ['Julian Kelly', 'Miles Sanders'], preferences: { social: 9, quiet: 3, sleep: 'late', interests: ['Soccer', 'Gaming'], varsity: true } },
+      { id: 156, zone: 'North Hall', position: { x: 440, y: 80 }, students: ['Eleanor Price', 'Claire Bennett'], preferences: { social: 4, quiet: 8, sleep: 'early', interests: ['Library', 'Writing'], varsity: false } },
+      { id: 157, zone: 'North Hall', position: { x: 500, y: 80 }, students: ['Lincoln Wood', 'Hudson Barnes'], preferences: { social: 7, quiet: 5, sleep: 'mixed', interests: ['Basketball', 'Fitness'], varsity: false } },
+      { id: 158, zone: 'North Hall', position: { x: 560, y: 80 }, students: ['Violet Ross', 'Aurora Henderson'], preferences: { social: 6, quiet: 6, sleep: 'early', interests: ['Art', 'Yoga'], varsity: false } },
+      { id: 159, zone: 'North Hall', position: { x: 620, y: 80 }, students: ['Grayson Coleman', 'Easton Jenkins'], preferences: { social: 8, quiet: 4, sleep: 'late', interests: ['Soccer', 'Film Making'], varsity: true } },
+      { id: 160, zone: 'North Hall', position: { x: 680, y: 80 }, students: ['Lucy Perry', 'Anna Powell'], preferences: { social: 3, quiet: 9, sleep: 'early', interests: ['Quiet Study', 'Research'], varsity: false } },
+
+      // Left outer wing (4 rooms down, starting after lounge with 10px spacing)
+      { id: 111, zone: 'West Wing', position: { x: 20, y: 140 }, students: ['Emily Harris', 'Abigail Clark'], preferences: { social: 6, quiet: 6, sleep: 'mixed', interests: ['Swimming', 'Art'], varsity: true } },
+      { id: 112, zone: 'West Wing', position: { x: 20, y: 200 }, students: ['Michael Lewis', 'Alexander Hall'], preferences: { social: 8, quiet: 4, sleep: 'late', interests: ['Soccer', 'Travel'], varsity: true } },
+      { id: 113, zone: 'West Wing', position: { x: 20, y: 260 }, students: ['Sophia Allen', 'Ella Young'], preferences: { social: 5, quiet: 7, sleep: 'early', interests: ['Reading', 'Baking'], varsity: false } },
+      { id: 114, zone: 'West Wing', position: { x: 20, y: 320 }, students: ['William King', 'Henry Wright'], preferences: { social: 9, quiet: 2, sleep: 'late', interests: ['Soccer', 'Party Planning'], varsity: false } },
+
+      // Left inner wing (4 rooms down - hallway side)
+      { id: 121, zone: 'West Wing', position: { x: 80, y: 140 }, students: ['Victoria Phillips', 'Samantha Campbell'], preferences: { social: 4, quiet: 8, sleep: 'early', interests: ['Study Groups', 'Research'], varsity: false } },
+      { id: 122, zone: 'West Wing', position: { x: 80, y: 200 }, students: ['Joseph Parker', 'Samuel Evans'], preferences: { social: 7, quiet: 5, sleep: 'mixed', interests: ['Basketball', 'Cooking'], varsity: false } },
+      { id: 123, zone: 'West Wing', position: { x: 80, y: 260 }, students: ['Madison Edwards', 'Avery Collins'], preferences: { social: 6, quiet: 6, sleep: 'mixed', interests: ['Art', 'Music'], varsity: false } },
+      { id: 124, zone: 'West Wing', position: { x: 80, y: 320 }, students: ['Jack Stewart', 'Luke Morris'], preferences: { social: 8, quiet: 4, sleep: 'late', interests: ['Soccer', 'Debate'], varsity: true } },
+
+      // Right inner wing (4 rooms down - hallway side)
+      { id: 131, zone: 'East Wing', position: { x: 740, y: 140 }, students: ['Gabriel Cook', 'Owen Morgan'], preferences: { social: 7, quiet: 5, sleep: 'late', interests: ['Gaming', 'Coding'], varsity: false } },
+      { id: 132, zone: 'East Wing', position: { x: 740, y: 200 }, students: ['Aria Bell', 'Layla Murphy'], preferences: { social: 5, quiet: 7, sleep: 'mixed', interests: ['Piano', 'Art History'], varsity: false } },
+      { id: 133, zone: 'East Wing', position: { x: 740, y: 260 }, students: ['Dylan Bailey', 'Caleb Rivera'], preferences: { social: 9, quiet: 2, sleep: 'late', interests: ['Soccer', 'Fraternity Rush'], varsity: true } },
+      { id: 134, zone: 'East Wing', position: { x: 740, y: 320 }, students: ['Penelope Cooper', 'Riley Richardson'], preferences: { social: 6, quiet: 6, sleep: 'mixed', interests: ['Swimming', 'Photography'], varsity: true } },
+
+      // Right outer wing (4 rooms down)
+      { id: 141, zone: 'East Wing', position: { x: 800, y: 140 }, students: ['Ryan Scott', 'Tyler Green'], preferences: { social: 7, quiet: 5, sleep: 'mixed', interests: ['Basketball', 'Music'], varsity: false } },
+      { id: 142, zone: 'East Wing', position: { x: 800, y: 200 }, students: ['Natalie Adams', 'Lily Baker'], preferences: { social: 6, quiet: 6, sleep: 'early', interests: ['Dance', 'Fashion'], varsity: false } },
+      { id: 143, zone: 'East Wing', position: { x: 800, y: 260 }, students: ['Joshua Nelson', 'Andrew Carter'], preferences: { social: 8, quiet: 4, sleep: 'late', interests: ['Soccer', 'Gaming'], varsity: true } },
+      { id: 144, zone: 'East Wing', position: { x: 800, y: 320 }, students: ['Hannah Mitchell', 'Addison Perez'], preferences: { social: 5, quiet: 7, sleep: 'early', interests: ['Reading', 'Knitting'], varsity: false } },
     ],
     specialAreas: [
-      { type: 'lounge', position: { x: 150, y: 150 }, label: 'Lounge' },
-      { type: 'rf', position: { x: 220, y: 150 }, label: 'RF' }
-    ]
-  },
-  {
-    id: 2,
-    name: 'Floor 2',
-    label: 'Middle Section',
-    rooms: [
-      { id: 201, position: { x: 10, y: 10 }, students: ['Ryan Scott', 'Tyler Green'], preferences: { social: 7, quiet: 5, interests: ['Basketball', 'Music', 'Photography'] } },
-      { id: 202, position: { x: 10, y: 80 }, students: ['Natalie Adams', 'Lily Baker'], preferences: { social: 6, quiet: 6, interests: ['Dance', 'Fashion', 'Blogging'] } },
-      { id: 203, position: { x: 10, y: 150 }, students: ['Joshua Nelson', 'Andrew Carter'], preferences: { social: 8, quiet: 4, interests: ['Soccer', 'Gaming', 'Fitness'] } },
-      { id: 204, position: { x: 10, y: 220 }, students: ['Hannah Mitchell', 'Addison Perez'], preferences: { social: 5, quiet: 7, interests: ['Reading', 'Knitting', 'Gardening'] } },
-      { id: 205, position: { x: 10, y: 290 }, students: ['Christopher Roberts', 'David Turner'], preferences: { social: 9, quiet: 3, interests: ['Soccer', 'Parties', 'Vlogging'] } },
-      
-      { id: 206, position: { x: 80, y: 10 }, students: ['Victoria Phillips', 'Samantha Campbell'], preferences: { social: 4, quiet: 8, interests: ['Study Groups', 'Research', 'Classical Music'] } },
-      { id: 207, position: { x: 150, y: 10 }, students: ['Joseph Parker', 'Samuel Evans'], preferences: { social: 7, quiet: 5, interests: ['Basketball', 'Cooking', 'Travel'] } },
-      { id: 208, position: { x: 220, y: 10 }, students: ['Madison Edwards', 'Avery Collins'], preferences: { social: 6, quiet: 6, interests: ['Art', 'Music', 'Volunteering'] } },
-      
-      { id: 209, position: { x: 290, y: 10 }, students: ['Jack Stewart', 'Luke Morris'], preferences: { social: 8, quiet: 4, interests: ['Soccer', 'Debate', 'Politics'] } },
-      { id: 210, position: { x: 290, y: 80 }, students: ['Evelyn Rogers', 'Scarlett Reed'], preferences: { social: 3, quiet: 9, interests: ['Meditation', 'Journaling', 'Nature'] } },
-      { id: 211, position: { x: 290, y: 150 }, students: ['Gabriel Cook', 'Owen Morgan'], preferences: { social: 7, quiet: 5, interests: ['Gaming', 'Coding', 'Anime'] } },
-      { id: 212, position: { x: 290, y: 220 }, students: ['Aria Bell', 'Layla Murphy'], preferences: { social: 5, quiet: 7, interests: ['Piano', 'Art History', 'Museums'] } },
-      
-      { id: 213, position: { x: 220, y: 290 }, students: ['Dylan Bailey', 'Caleb Rivera'], preferences: { social: 9, quiet: 2, interests: ['Soccer', 'Fraternity Rush', 'Networking'] } },
-      { id: 214, position: { x: 150, y: 290 }, students: ['Penelope Cooper', 'Riley Richardson'], preferences: { social: 6, quiet: 6, interests: ['Swimming', 'Photography', 'Travel'] } },
-      { id: 215, position: { x: 80, y: 290 }, students: ['Isaac Cox', 'Nathan Howard'], preferences: { social: 4, quiet: 8, interests: ['Chess', 'Programming', 'Math'] } },
-    ],
-    specialAreas: [
-      { type: 'lounge', position: { x: 150, y: 150 }, label: 'Lounge' },
-      { type: 'rf', position: { x: 220, y: 150 }, label: 'RF' }
-    ]
-  },
-  {
-    id: 3,
-    name: 'Floor 3',
-    label: 'Upper Level',
-    rooms: [
-      { id: 301, position: { x: 10, y: 10 }, students: ['Elijah Ward', 'Sebastian Torres'], preferences: { social: 7, quiet: 5, interests: ['Basketball', 'Music Production', 'DJing'] } },
-      { id: 302, position: { x: 10, y: 80 }, students: ['Nora Peterson', 'Hazel Gray'], preferences: { social: 5, quiet: 7, interests: ['Reading', 'Tea', 'Calligraphy'] } },
-      { id: 303, position: { x: 10, y: 150 }, students: ['Carter Ramirez', 'Wyatt James'], preferences: { social: 8, quiet: 4, interests: ['Soccer', 'Entrepreneurship', 'Startups'] } },
-      { id: 304, position: { x: 10, y: 220 }, students: ['Aubrey Watson', 'Brooklyn Brooks'], preferences: { social: 6, quiet: 6, interests: ['Dance', 'Fashion Design', 'Sewing'] } },
-      { id: 305, position: { x: 10, y: 290 }, students: ['Julian Kelly', 'Miles Sanders'], preferences: { social: 9, quiet: 3, interests: ['Soccer', 'Gaming', 'Streaming'] } },
-      
-      { id: 306, position: { x: 80, y: 10 }, students: ['Eleanor Price', 'Claire Bennett'], preferences: { social: 4, quiet: 8, interests: ['Library', 'Writing', 'Book Club'] } },
-      { id: 307, position: { x: 150, y: 10 }, students: ['Lincoln Wood', 'Hudson Barnes'], preferences: { social: 7, quiet: 5, interests: ['Basketball', 'Fitness', 'Nutrition'] } },
-      { id: 308, position: { x: 220, y: 10 }, students: ['Violet Ross', 'Aurora Henderson'], preferences: { social: 6, quiet: 6, interests: ['Art', 'Yoga', 'Sustainability'] } },
-      
-      { id: 309, position: { x: 290, y: 10 }, students: ['Grayson Coleman', 'Easton Jenkins'], preferences: { social: 8, quiet: 4, interests: ['Soccer', 'Film Making', 'YouTube'] } },
-      { id: 310, position: { x: 290, y: 80 }, students: ['Lucy Perry', 'Anna Powell'], preferences: { social: 3, quiet: 9, interests: ['Quiet Study', 'Research', 'Lab Work'] } },
-      { id: 311, position: { x: 290, y: 150 }, students: ['Leo Long', 'Asher Patterson'], preferences: { social: 7, quiet: 5, interests: ['Gaming', 'Esports', 'Tech'] } },
-      { id: 312, position: { x: 290, y: 220 }, students: ['Stella Hughes', 'Maya Flores'], preferences: { social: 5, quiet: 7, interests: ['Music', 'Choir', 'A Cappella'] } },
-      
-      { id: 313, position: { x: 220, y: 290 }, students: ['Jaxon Washington', 'Maverick Butler'], preferences: { social: 9, quiet: 2, interests: ['Soccer', 'Parties', 'Social Events'] } },
-      { id: 314, position: { x: 150, y: 290 }, students: ['Zoey Simmons', 'Leah Foster'], preferences: { social: 6, quiet: 6, interests: ['Swimming', 'Cooking', 'Food Blog'] } },
-      { id: 315, position: { x: 80, y: 290 }, students: ['Adrian Gonzales', 'Dominic Bryant'], preferences: { social: 4, quiet: 8, interests: ['Chess', 'Debate', 'Philosophy'] } },
-    ],
-    specialAreas: [
-      { type: 'lounge', position: { x: 150, y: 150 }, label: 'Lounge' },
-      { type: 'rf', position: { x: 220, y: 150 }, label: 'RF' }
+      { type: 'lounge', position: { x: 20, y: 20 }, label: 'Student\nLounge', width: 110, height: 110 },
+      { type: 'rf', position: { x: 740, y: 20 }, label: 'RF\nApartment', width: 110, height: 110 },
+      { type: 'exit', position: { x: 20, y: 380 }, label: 'Exit/\nStairs', width: 110, height: 60 },
+      { type: 'exit', position: { x: 740, y: 380 }, label: 'Exit/\nStairs', width: 110, height: 60 }
     ]
   }
 ];
@@ -103,106 +73,99 @@ const MOCK_ISSUES = [
   {
     id: 1,
     floorId: 1,
+    zone: 'West Wing',
     severity: 'medium',
-    title: 'High-energy pair near quiet RF area',
-    description: 'Room 108 (James Wilson & Benjamin Taylor) are very social (social: 9) and placed near the RF quiet area. This may cause disruptions.',
-    affectedRooms: [108],
+    title: 'High-energy pair in quiet zone',
+    description: 'Room 114 (William King & Henry Wright) are very social (social: 9) near quieter neighbors.',
+    affectedRooms: [114],
     recommendation: {
       action: 'swap',
-      fromRoom: 108,
-      toRoom: 114,
-      reason: 'Room 114 is near the lounge, better suited for social students'
+      fromRoom: 114,
+      toRoom: 106,
+      reason: 'Better suited for high-energy students'
     }
   },
   {
     id: 2,
     floorId: 1,
-    severity: 'low',
-    title: 'Shy pair in low-traffic area',
-    description: 'Room 103 (Olivia Martinez & Zoe Kim) are introverted (social: 4) and in a corner. They might benefit from more social exposure near the lounge.',
-    affectedRooms: [103],
-    recommendation: {
-      action: 'swap',
-      fromRoom: 103,
-      toRoom: 107,
-      reason: 'Room 107 is closer to common areas for gradual social integration'
-    }
-  },
-  {
-    id: 3,
-    floorId: 1,
+    zone: 'East Wing',
     severity: 'high',
-    title: 'Multiple soccer players may unbalance teams',
-    description: 'Having many soccer players (Rooms 101, 104, 106, 108, 112, 114) on the same floor may unbalance intramural dynamics. Consider distributing across floors.',
-    affectedRooms: [101, 104, 106, 108, 112, 114],
+    title: 'Athlete cluster in East Wing',
+    description: 'High concentration of varsity athletes in the East Wing.',
+    affectedRooms: [118, 120, 128, 129, 139],
     recommendation: {
       action: 'swap',
-      fromRoom: 106,
-      toRoom: 206,
-      reason: 'Redistribute athletic interests across floors for better balance'
-    }
-  },
-  {
-    id: 4,
-    floorId: 2,
-    severity: 'medium',
-    title: 'Very quiet pair far from RF support',
-    description: 'Room 210 (Evelyn Rogers & Scarlett Reed) prefer quiet (quiet: 9) but are far from the RF area where they could get academic support.',
-    affectedRooms: [210],
-    recommendation: {
-      action: 'swap',
-      fromRoom: 210,
-      toRoom: 212,
-      reason: 'Closer to RF for academic support and mentorship'
-    }
-  },
-  {
-    id: 5,
-    floorId: 2,
-    severity: 'low',
-    title: 'Party-oriented pair in middle section',
-    description: 'Room 213 (Dylan Bailey & Caleb Rivera) are very social (social: 9) and interested in fraternity rush. Near lounge could amplify noise.',
-    affectedRooms: [213],
-    recommendation: {
-      action: 'leave',
-      reason: 'Monitor during first quarter; lounge proximity may actually facilitate healthy social integration'
-    }
-  },
-  {
-    id: 6,
-    floorId: 3,
-    severity: 'medium',
-    title: 'Streaming/content creators clustered',
-    description: 'Rooms 305 and 309 both have students interested in streaming/content creation. Potential for noise conflicts during recording.',
-    affectedRooms: [305, 309],
-    recommendation: {
-      action: 'swap',
-      fromRoom: 305,
-      toRoom: 115,
-      reason: 'Separate content creators to avoid recording schedule conflicts'
+      fromRoom: 118,
+      toRoom: 113,
+      reason: 'Balance athlete distribution across zones'
     }
   }
 ];
 
 function DormAssignment() {
-  const [currentFloorIndex, setCurrentFloorIndex] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [resolvedIssues, setResolvedIssues] = useState(new Set());
+  const [activeLens, setActiveLens] = useState('social'); // 'social', 'sleep', 'varsity', 'none'
+  const [swapSource, setSwapSource] = useState(null);
+  const [floors, setFloors] = useState(MOCK_FLOORS);
 
-  const currentFloor = MOCK_FLOORS[currentFloorIndex];
+  const currentFloor = floors[0]; // Always use first floor
   const currentFloorIssues = MOCK_ISSUES.filter(
     issue => issue.floorId === currentFloor.id && !resolvedIssues.has(issue.id)
   );
 
   const handleRoomClick = (room) => {
-    setSelectedRoom(room);
-    setSelectedIssue(null);
+    if (swapSource) {
+      if (swapSource.id === room.id) {
+        // Cancel swap if clicking same room
+        setSwapSource(null);
+        setSelectedRoom(room);
+      } else {
+        // Perform swap
+        handleSwap(swapSource, room);
+      }
+    } else {
+      setSelectedRoom(room);
+      setSelectedIssue(null);
+    }
+  };
+
+  const handleSwap = (roomA, roomB) => {
+    // Deep copy floors to mutate
+    const newFloors = JSON.parse(JSON.stringify(floors));
+    const floor = newFloors[0];
+    
+    const rA = floor.rooms.find(r => r.id === roomA.id);
+    const rB = floor.rooms.find(r => r.id === roomB.id);
+    
+    // Swap students and preferences
+    const tempStudents = rA.students;
+    const tempPreferences = rA.preferences;
+    
+    rA.students = rB.students;
+    rA.preferences = rB.preferences;
+    
+    rB.students = tempStudents;
+    rB.preferences = tempPreferences;
+    
+    setFloors(newFloors);
+    setSwapSource(null);
+    setSelectedRoom(rB); // Select the target room after swap
+  };
+
+  const initiateSwap = (room) => {
+    setSwapSource(room);
+  };
+
+  const cancelSwap = () => {
+    setSwapSource(null);
   };
 
   const handleIssueClick = (issue) => {
     setSelectedIssue(issue);
     setSelectedRoom(null);
+    setSwapSource(null);
   };
 
   const handleAcceptRecommendation = (issueId) => {
@@ -215,48 +178,70 @@ function DormAssignment() {
     setSelectedIssue(null);
   };
 
-  const handleNextFloor = () => {
-    setCurrentFloorIndex((prev) => (prev + 1) % MOCK_FLOORS.length);
-    setSelectedRoom(null);
-    setSelectedIssue(null);
+  const getLegendLabels = () => {
+    switch (activeLens) {
+      case 'social':
+        return { low: 'Low', high: 'High' };
+      case 'sleep':
+        return { low: 'Early', high: 'Late' };
+      case 'varsity':
+        return { low: 'Not Athlete', high: 'Athlete' };
+      default:
+        return { low: 'Low', high: 'High' };
+    }
   };
 
-  const handlePrevFloor = () => {
-    setCurrentFloorIndex((prev) => (prev - 1 + MOCK_FLOORS.length) % MOCK_FLOORS.length);
-    setSelectedRoom(null);
-    setSelectedIssue(null);
-  };
+  const legendLabels = getLegendLabels();
 
   return (
     <div className="dorm-assignment">
       <div className="dorm-header">
-        <h1 className="dorm-title">Dorm Assignment</h1>
-        <p className="dorm-subtitle">Review auto-generated room assignments and address flagged concerns</p>
+        <div className="header-content">
+          <div>
+            <h1 className="dorm-title">Dorm Assignment</h1>
+            <p className="dorm-subtitle">Review and adjust assignments with human agency</p>
+          </div>
+          <div className="header-controls">
+            <div className="lens-selector">
+              <span className="lens-label">View Lens:</span>
+              <div className="lens-buttons">
+                <button 
+                  className={`lens-btn ${activeLens === 'social' ? 'active' : ''}`}
+                  onClick={() => setActiveLens('social')}
+                >
+                  Social Vibe
+                </button>
+                <button 
+                  className={`lens-btn ${activeLens === 'sleep' ? 'active' : ''}`}
+                  onClick={() => setActiveLens('sleep')}
+                >
+                  Sleep Habits
+                </button>
+                <button 
+                  className={`lens-btn ${activeLens === 'varsity' ? 'active' : ''}`}
+                  onClick={() => setActiveLens('varsity')}
+                >
+                  Athletes
+                </button>
+              </div>
+            </div>
+            
+            {activeLens !== 'none' && (
+              <div className="color-legend">
+                <span className="legend-label">Intensity:</span>
+                <div className="legend-gradient">
+                  <span className="legend-text">{legendLabels.low}</span>
+                  <div className="gradient-bar"></div>
+                  <span className="legend-text">{legendLabels.high}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="dorm-content">
         <div className="dorm-main">
-          <div className="floor-navigation">
-            <button 
-              className="floor-nav-btn"
-              onClick={handlePrevFloor}
-              aria-label="Previous floor"
-            >
-              ←
-            </button>
-            <div className="floor-indicator">
-              <span className="floor-name">{currentFloor.name}</span>
-              <span className="floor-count">Floor {currentFloorIndex + 1} of {MOCK_FLOORS.length}</span>
-            </div>
-            <button 
-              className="floor-nav-btn"
-              onClick={handleNextFloor}
-              aria-label="Next floor"
-            >
-              →
-            </button>
-          </div>
-
           <FloorPlan
             floor={currentFloor}
             issues={currentFloorIssues}
@@ -264,13 +249,8 @@ function DormAssignment() {
             selectedIssue={selectedIssue}
             onRoomClick={handleRoomClick}
             onIssueClick={handleIssueClick}
-          />
-
-          <IssueList
-            issues={currentFloorIssues}
-            allIssues={MOCK_ISSUES.filter(i => !resolvedIssues.has(i.id))}
-            onIssueClick={handleIssueClick}
-            selectedIssue={selectedIssue}
+            activeLens={activeLens}
+            swapSource={swapSource}
           />
         </div>
 
@@ -282,7 +262,12 @@ function DormAssignment() {
           onClose={() => {
             setSelectedRoom(null);
             setSelectedIssue(null);
+            setSwapSource(null);
           }}
+          activeLens={activeLens}
+          swapSource={swapSource}
+          onInitiateSwap={initiateSwap}
+          onCancelSwap={cancelSwap}
         />
       </div>
     </div>
