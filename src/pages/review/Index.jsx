@@ -13,7 +13,6 @@ import { Link } from 'react-router-dom'
 function ReviewIndex() {
   return (
     <div className="placeholder-page">
-      <main className="main-content">
       <h1>Review Matches</h1>
       <p>
         This section handles reviewing and approving roommate match suggestions.
@@ -23,7 +22,6 @@ function ReviewIndex() {
       <Link to="/" className="back-link">
         ← Back to Dashboard
       </Link>
-      </main>
     </div>
   )
 }

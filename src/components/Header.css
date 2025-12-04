@@ -1,32 +1,56 @@
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background-color: var(--color-accent);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: var(--header-bg);
-  font-size: 1.5rem;
+  justify-content: space-between;
+  padding: 0 var(--spacing-lg);
+  z-index: 100;
+  border-bottom: none;
 }
 
 .header-logo {
+  font-family: var(--font-display);
   font-size: 1.5rem;
+  font-weight: 400;
+  color: white;
+  letter-spacing: -0.02em;
 }
 
-.header-actions {
+.header-logo:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.header-nav {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
-.icon-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: var(--icon-bg);
+.header-icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  border: 2px solid white;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
+  color: white;
+  background: transparent;
+  transition: all 0.2s ease;
 }
 
-.icon-btn:hover {
-  background-color: #d0d0d0;
+.header-icon-btn:hover {
+  border-color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.85);
 }
+
+.header-icon-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
