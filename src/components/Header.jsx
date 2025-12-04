@@ -5,7 +5,7 @@ function Header() {
   return (
     <header className="header">
       <Link to="/" className="header-logo">
-        stanford | resident department
+        Stanford | Frosh Matching Portal
       </Link>
       
       <nav className="header-nav">
