@@ -97,16 +97,16 @@ function RoommateIndex() {
       <div className="roommate-actions">
         <div className="action-btn-row">
           <button
-            className="action-btn action-btn--reject"
-            onClick={handleNextPair}
-          >
-            Reject
-          </button>
-          <button
             className="action-btn action-btn--approve"
             onClick={handleNextPair}
           >
             Approve
+          </button>
+          <button
+            className="action-btn action-btn--reject"
+            onClick={handleNextPair}
+          >
+            Reject
           </button>
         </div>
         <button className="skip-btn" onClick={handleNextPair}>
@@ -119,12 +119,12 @@ function RoommateIndex() {
           <div
             className="progress-fill"
             style={{
-              width: `${((currentPairIndex + 1) / DEMO_MATCHES.length) * 100}%`,
+              width: `${(currentPairIndex / DEMO_MATCHES.length) * 100}%`,
             }}
           />
         </div>
         <div className="progress-text">
-          {currentPairIndex + 1} of {DEMO_MATCHES.length} Matches Reviewed
+          {currentPairIndex} of {DEMO_MATCHES.length} Matches Reviewed
         </div>
       </div>
 
