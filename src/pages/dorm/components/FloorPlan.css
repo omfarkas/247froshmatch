@@ -8,25 +8,9 @@
   justify-content: center;
 }
 
-.floor-plan-label {
-  height: 24px;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.area-label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--color-primary);
-  background: rgba(var(--color-primary-rgb), 0.1);
-  padding: 4px 12px;
-  border-radius: 12px;
-}
-
 .floor-plan-wrapper {
   background: var(--color-surface);
-  padding: 1.5rem;
+  padding: 1rem 1.5rem 1.5rem;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
   border: 1px solid var(--color-border);
@@ -37,7 +21,7 @@
   flex: 1;
   width: 100%;
   max-width: 95%;
-  max-height: 80vh;
+  max-height: 85vh;
 }
 
 .floor-plan {
@@ -54,74 +38,121 @@
 }
 
 .room:hover {
-  filter: brightness(0.95);
+  filter: brightness(0.92);
+  stroke-width: 2.5;
 }
 
 .room.selected {
   stroke: var(--color-primary) !important;
   stroke-width: 3;
-  filter: drop-shadow(0 0 4px rgba(var(--color-primary-rgb), 0.4));
+  filter: drop-shadow(0 0 6px rgba(var(--color-primary-rgb), 0.5));
 }
 
-.room.issue {
-  stroke: var(--color-warning);
-  stroke-width: 2;
-  stroke-dasharray: 4 2;
-}
-
-.room.swap-source {
-  stroke: var(--color-primary);
+/* Rooms highlighted in selected section */
+.room.zone-highlight {
+  stroke: #f59e0b !important;
   stroke-width: 3;
-  stroke-dasharray: 4 4;
-  animation: pulse-border 2s infinite;
+  fill: rgba(245, 158, 11, 0.15) !important;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.4));
+}
+
+/* Strong swap source indicator */
+.room.swap-source {
+  stroke: #8b5cf6 !important;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.6));
+  animation: swap-pulse 1.5s ease-in-out infinite;
 }
 
 .room.swap-target:hover {
-  stroke: var(--color-success);
+  stroke: var(--color-success) !important;
   stroke-width: 3;
-  cursor: alias;
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.5));
+  cursor: crosshair;
 }
 
-@keyframes pulse-border {
-  0% { stroke-opacity: 1; }
-  50% { stroke-opacity: 0.5; }
-  100% { stroke-opacity: 1; }
+@keyframes swap-pulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+  }
+  50% { 
+    filter: drop-shadow(0 0 16px rgba(139, 92, 246, 0.8));
+  }
 }
 
-.issue-icon-bg {
-  fill: var(--color-warning);
-  stroke: var(--color-surface);
-  stroke-width: 2;
-  transition: all 0.2s;
-  cursor: pointer;
+/* Section tabs at top */
+.section-tabs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  width: 100%;
 }
 
-.issue-icon-bg:hover {
-  transform: scale(1.1);
-  transform-origin: center;
-}
-
-.issue-icon-bg.selected {
-  fill: var(--color-error);
-  transform: scale(1.15);
-  transform-origin: center;
-}
-
-.issue-icon-text {
-  font-size: 12px;
+.section-tabs-label {
+  font-size: 0.9rem;
   font-weight: 700;
-  fill: var(--color-surface);
-  pointer-events: none;
-}
-
-.floor-plan-footer {
-  margin-top: 0.5rem;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.floor-label {
-  font-size: 1.1rem;
-  font-weight: 600;
   color: var(--color-text-primary);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
+
+.section-tabs-list {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  flex: 1;
+  padding-bottom: 4px;
+}
+
+.section-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.section-tab.pending {
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.section-tab.pending:hover {
+  border-color: var(--color-warning);
+  background: rgba(245, 158, 11, 0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
+}
+
+.section-tab.approved {
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
+  border-color: var(--color-success);
+  box-shadow: 0 2px 4px rgba(34, 197, 94, 0.15);
+}
+
+.section-tab.selected {
+  border-color: var(--color-warning) !important;
+  background: rgba(245, 158, 11, 0.18) !important;
+  color: #b45309;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+  transform: translateY(-1px);
+}
+
+.tab-check {
+  font-size: 1rem;
+  font-weight: 700;
+}
+

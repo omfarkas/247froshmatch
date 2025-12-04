@@ -1,45 +1,169 @@
 import './IssuePanel.css';
 
-function IssuePanel({ selectedRoom, selectedIssue, onAccept, onReject, onClose, activeLens, swapSource, onInitiateSwap, onCancelSwap }) {
-  if (!selectedRoom && !selectedIssue && !swapSource) {
+function IssuePanel({ 
+  selectedRoom, 
+  selectedZone, 
+  zoneRooms,
+  roomContext,
+  onApproveZone,
+  onClose, 
+  activeLens, 
+  swapSource, 
+  onInitiateSwap,
+  onCancelSwap,
+  floor
+}) {
+  // Zone review panel
+  if (selectedZone) {
     return (
-      <div className="issue-panel empty">
-        <div className="empty-state">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 16v-4M12 8h.01"/>
-          </svg>
-          <p>Select a room to inspect or swap</p>
+      <div className="issue-panel">
+        <div className="panel-header">
+          <h2>{selectedZone.label}</h2>
+          <button className="close-btn" onClick={onClose}>×</button>
+        </div>
+        
+        <div className="panel-content">
+          <div className="zone-status-card">
+            <div className="status-header">
+              <span className="status-label">Status</span>
+              <span className={`status-badge ${selectedZone.status}`}>
+                {selectedZone.status === 'approved' ? '✓ Approved' : 'Pending Review'}
+              </span>
+            </div>
+          </div>
+
+          <div className="zone-stats">
+            <h3>Area Stats</h3>
+            <div className="stat-grid">
+              <div className="stat-item">
+                <span className="label">Social Vibe</span>
+                <span className="value">{selectedZone.stats.social}</span>
+              </div>
+              <div className="stat-item">
+                <span className="label">Sleep Schedule</span>
+                <span className="value">{selectedZone.stats.sleep}</span>
+              </div>
+              <div className="stat-item">
+                <span className="label">Athletes</span>
+                <span className="value">{selectedZone.stats.athletes}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="zone-insights">
+            <h3>Key Insights</h3>
+            <ul className="insight-list">
+              {selectedZone.insights.map((insight, idx) => (
+                <li key={idx} className="insight-item">
+                  <span className="bullet">•</span>
+                  {insight}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="zone-rooms">
+            <h3>Rooms ({zoneRooms.length})</h3>
+            <div className="room-list">
+              {zoneRooms.map(room => (
+                <div key={room.id} className="room-list-item">
+                  <div className="room-info">
+                    <strong>Room {room.id}</strong>
+                    <span className="students">{room.students.join(' & ')}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="approval-section">
+            <div className="approval-info">
+              <span className="info-icon">💡</span>
+              <p>Approving this section marks it complete in the progress tracker. Review all rooms before approving.</p>
+            </div>
+            {selectedZone.status !== 'approved' ? (
+              <button 
+                className="action-btn approve"
+                onClick={() => onApproveZone(selectedZone.id)}
+              >
+                ✓ Approve This Section
+              </button>
+            ) : (
+              <div className="approved-indicator">
+                <span>✓ Section Approved</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
   }
 
-  if (swapSource && !selectedRoom) {
-     return (
+  // Empty state - no selection
+  if (!selectedRoom && !swapSource) {
+    return (
+      <div className="issue-panel empty">
+        <div className="empty-state">
+          <div className="empty-icon">🏠</div>
+          <h3>Review Dorm Assignments</h3>
+          <div className="instructions">
+            <p><strong>1.</strong> Click a section tab below to review & approve</p>
+            <p><strong>2.</strong> Click any room to see details & swap</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Swap mode active - room selected for swap
+  if (swapSource) {
+    return (
       <div className="issue-panel swap-mode">
-        <div className="panel-header">
-          <h3 className="panel-title">Swap Mode</h3>
+        <div className="panel-header swap-header">
+          <div className="swap-mode-badge">SWAP MODE</div>
           <button className="close-btn" onClick={onCancelSwap} aria-label="Close">
             ×
           </button>
         </div>
         <div className="panel-content">
-          <div className="swap-instruction">
-            <p>Select another room to swap <strong>Room {swapSource.id}</strong> with.</p>
-            <div className="room-card source">
-               <h4>Room {swapSource.id}</h4>
-               <p>{swapSource.students.join(' & ')}</p>
+          <div className="swap-source-card">
+            <span className="swap-label">Swapping Room</span>
+            <h4>Room {swapSource.id}</h4>
+            <p className="students">{swapSource.students.join(' & ')}</p>
+          </div>
+          
+          <div className="swap-instruction-box">
+            <div className="swap-arrow-icon">→</div>
+            <p>Click another room on the floor plan to complete the swap</p>
+          </div>
+
+          <div className="swap-room-stats">
+            <h4>Current Room Info</h4>
+            <div className="mini-stats">
+              <div className="mini-stat">
+                <span>Social</span>
+                <strong>{swapSource.preferences.social}/10</strong>
+              </div>
+              <div className="mini-stat">
+                <span>Sleep</span>
+                <strong className="capitalize">{swapSource.preferences.sleep}</strong>
+              </div>
+              <div className="mini-stat">
+                <span>Athlete</span>
+                <strong>{swapSource.preferences.varsity ? 'Yes' : 'No'}</strong>
+              </div>
             </div>
           </div>
+
           <button className="action-btn cancel" onClick={onCancelSwap}>
             Cancel Swap
           </button>
         </div>
       </div>
-     );
+    );
   }
 
+  // Room info display
   if (selectedRoom) {
     return (
       <div className="issue-panel">
@@ -59,7 +183,7 @@ function IssuePanel({ selectedRoom, selectedIssue, onAccept, onReject, onClose, 
           </div>
 
           <div className="room-info-section">
-            <h4 className="section-title">Lens Insights</h4>
+            <h4 className="section-title">Room Attributes</h4>
             <div className="lens-stats">
                <div className={`stat-item ${activeLens === 'social' ? 'highlight' : ''}`}>
                  <span className="stat-label">Social Energy</span>
@@ -76,6 +200,20 @@ function IssuePanel({ selectedRoom, selectedIssue, onAccept, onReject, onClose, 
             </div>
           </div>
 
+          {roomContext && roomContext.length > 0 && (
+            <div className="room-info-section">
+              <h4 className="section-title">Location Considerations</h4>
+              <ul className="context-list">
+                {roomContext.map((insight, i) => (
+                  <li key={i} className="context-item">
+                    <span className="context-icon">📍</span>
+                    {insight}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="room-info-section">
             <h4 className="section-title">Interests</h4>
             <div className="tags">
@@ -86,101 +224,13 @@ function IssuePanel({ selectedRoom, selectedIssue, onAccept, onReject, onClose, 
           </div>
 
           <div className="panel-actions">
-            <button className="action-btn primary" onClick={() => onInitiateSwap(selectedRoom)}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M7 16l-4-4m0 0l4-4m-4 4h18M17 8l4 4m0 0l-4 4"/>
-              </svg>
-              Swap Room
+            <button 
+              className="action-btn primary"
+              onClick={() => onInitiateSwap(selectedRoom)}
+            >
+              ⇄ Swap This Room
             </button>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (selectedIssue) {
-    return (
-      <div className="issue-panel">
-        <div className="panel-header">
-          <div className="issue-header-content">
-            <span className="severity-badge">
-              {selectedIssue.severity}
-            </span>
-            <h3 className="panel-title">{selectedIssue.title}</h3>
-          </div>
-          <button className="close-btn" onClick={onClose} aria-label="Close">
-            ×
-          </button>
-        </div>
-
-        <div className="panel-content">
-          <div className="issue-description">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 16v-4M12 8h.01"/>
-            </svg>
-            <p>{selectedIssue.description}</p>
-          </div>
-
-          {selectedIssue.recommendation && (
-            <div className="recommendation-section">
-              <h4 className="section-title">Recommendation</h4>
-              
-              {selectedIssue.recommendation.action === 'swap' ? (
-                <>
-                  <div className="swap-visual">
-                    <div className="swap-room">
-                      <span className="room-number">{selectedIssue.recommendation.fromRoom}</span>
-                    </div>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M7 16l-4-4m0 0l4-4m-4 4h18M17 8l4 4m0 0l-4 4"/>
-                    </svg>
-                    <div className="swap-room">
-                      <span className="room-number">{selectedIssue.recommendation.toRoom}</span>
-                    </div>
-                  </div>
-                  <p className="recommendation-reason">
-                    {selectedIssue.recommendation.reason}
-                  </p>
-                  
-                  <div className="action-buttons">
-                    <button 
-                      className="action-btn accept"
-                      onClick={() => onAccept(selectedIssue.id)}
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M20 6L9 17l-5-5"/>
-                      </svg>
-                      Accept
-                    </button>
-                    <button 
-                      className="action-btn reject"
-                      onClick={() => onReject(selectedIssue.id)}
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M18 6L6 18M6 6l12 12"/>
-                      </svg>
-                      Reject
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p className="recommendation-reason">
-                    {selectedIssue.recommendation.reason}
-                  </p>
-                  <div className="action-buttons">
-                    <button 
-                      className="action-btn acknowledge"
-                      onClick={() => onAccept(selectedIssue.id)}
-                    >
-                      Acknowledge
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
         </div>
       </div>
     );
