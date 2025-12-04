@@ -150,7 +150,7 @@
   gap: var(--spacing-sm);
 }
 
-.action-btn {
+button.action-btn {
   padding: var(--spacing-sm) var(--spacing-lg);
   font-size: 1rem;
   font-weight: 500;
@@ -164,25 +164,25 @@
 }
 
 /* Reject - Gray outline button */
-.action-btn--reject {
-  border-color: var(--color-text-secondary);
+button.action-btn--reject {
+  border: 2px solid var(--color-text-primary);
   background: transparent;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
 }
 
-.action-btn--reject:hover {
+button.action-btn--reject:hover {
   background: var(--color-text-secondary);
   color: var(--color-surface);
 }
 
 /* Approve - Solid red button */
-.action-btn--approve {
+button.action-btn--approve {
   background: var(--color-accent);
-  border-color: var(--color-accent);
+  border: 2px solid var(--color-accent);
   color: white;
 }
 
-.action-btn--approve:hover {
+button.action-btn--approve:hover {
   background: #6b1010;
   border-color: #6b1010;
 }

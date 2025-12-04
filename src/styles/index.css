@@ -5,15 +5,15 @@
 /* CSS Variables - Edit these to change the look across ALL pages */
 :root {
   /* Stanford Color Palette */
-  --color-bg: #FCF8EE;               /* Light Eggshell - page background */
-  --color-surface: #ffffff;          /* White - cards */
-  --color-surface-alt: #f5f0e6;      /* Light cream for inner sections */
-  --color-border: #d4cfc2;           /* Warm gray border */
-  --color-text-primary: #24231F;     /* Carbon Black */
-  --color-text-secondary: #48463E;   /* Charcoal Brown */
-  --color-accent: #8C1515;           /* Crushed Berry - Stanford Red */
-  --color-icon: #48463E;             /* Charcoal Brown */
-  --color-success: #2E6F40;          /* Turf Green - for approve */
+  --color-bg: #fcf8ee; /* Light Eggshell - page background */
+  --color-surface: #ffffff; /* White - cards */
+  --color-surface-alt: #f5f0e6; /* Light cream for inner sections */
+  --color-border: #d4cfc2; /* Warm gray border */
+  --color-text-primary: #24231f; /* Carbon Black */
+  --color-text-secondary: #48463e; /* Charcoal Brown */
+  --color-accent: #8c1515; /* Crushed Berry - Stanford Red */
+  --color-icon: #48463e; /* Charcoal Brown */
+  --color-success: #2e6f40; /* Turf Green - for approve */
 
   /* Typography - Stanford Fonts */
   --font-primary: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
@@ -51,8 +51,6 @@
 
 html {
   font-size: 16px;
-  overflow: hidden;
-  height: 100vh;
 }
 
 body {
@@ -61,34 +59,28 @@ body {
   color: var(--color-text-primary);
   line-height: 1.5;
   min-height: 100vh;
-  overflow: hidden;
-  height: 100vh;
 }
 
-h1, h2 {
+h1,
+h2 {
   font-family: var(--font-primary);
   font-weight: 600;
 }
 
 #root {
   min-height: 100vh;
-  height: 100vh;
-  overflow: hidden;
 }
 
 .app {
   min-height: 100vh;
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .main-content {
   flex: 1;
   padding: var(--spacing-lg);
   padding-top: calc(var(--header-height) + var(--spacing-lg));
-  overflow: hidden;
 }
 
 /* Utility Classes */
