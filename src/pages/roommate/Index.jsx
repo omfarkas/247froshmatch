@@ -51,6 +51,7 @@ function RoommateIndex() {
 
   return (
     <div className="roommate-page">
+      <main className="main-content">
       <Link to="/" className="back-link">
         ← Back to Dashboard
       </Link>
@@ -135,6 +136,7 @@ function RoommateIndex() {
           onClose={handleCloseModal}
         />
       )}
+      </main>
     </div>
   );
 }

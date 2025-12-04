@@ -1,29 +1,37 @@
-import { Link } from 'react-router-dom'
-import './DashboardCard.css'
+import React from 'react';
+import './DashboardCard.css';
 
-function DashboardCard({ title, icon, current, total, to }) {
-  const progress = Math.round((current / total) * 100)
-  
+const DashboardCard = ({ title, current, total, onClick, children }) => {
   return (
-    <Link to={to} className="dashboard-card">
-      <h2 className="dashboard-card-title">{title}</h2>
+    <div className="dashboard-card" onClick={onClick}>
+      <h2 className="card-title">{title}</h2>
       
-      <div className="dashboard-card-visual">
-        {icon}
+      <div className="card-content">
+        {children}
       </div>
       
-      <div className="dashboard-card-progress">
-        <div className="progress-text">{current}/{total}</div>
-        <div className="progress-bar">
-          <div 
-            className="progress-fill" 
-            style={{ width: `${progress}%` }}
-          />
+      <div className="card-footer">
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#666' }}>
+          <span>{current} / {total}</span>
+          <span>students</span>
+        </div>
+        {/* Simple progress bar */}
+        <div style={{ 
+          height: '4px', 
+          backgroundColor: '#e0e0e0', 
+          borderRadius: '2px', 
+          marginTop: '0.5rem',
+          overflow: 'hidden' 
+        }}>
+          <div style={{ 
+            width: `${(current / total) * 100}%`, 
+            height: '100%', 
+            backgroundColor: '#000' 
+          }} />
         </div>
       </div>
-    </Link>
-  )
-}
+    </div>
+  );
+};
 
-export default DashboardCard
-
+export default DashboardCard;
