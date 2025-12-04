@@ -1,7 +1,11 @@
 import DormAssignment from './DormAssignment'
 
 function DormIndex() {
-  return <DormAssignment />
+  return (
+    <main className="main-content">
+      <DormAssignment />
+    </main>
+  )
 }
 
 export default DormIndex
