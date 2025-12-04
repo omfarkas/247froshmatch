@@ -5,19 +5,25 @@
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   overflow: hidden;
+  margin: calc(-1 * var(--spacing-lg));
+  margin-top: calc(-1 * var(--spacing-lg));
+  width: 100vw;
+  height: calc(100vh - var(--header-height));
 }
 
 .dorm-header {
-  padding: 0.5rem 2rem;
+  padding: 0.75rem 2rem;
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-surface);
   flex-shrink: 0;
+  width: 100%;
 }
 
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .header-controls {
@@ -98,7 +104,7 @@
   background: none;
   border-radius: 6px;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.2s;
@@ -106,12 +112,14 @@
 
 .lens-btn:hover {
   color: var(--color-text-primary);
+  background: rgba(72, 70, 62, 0.08);
 }
 
 .lens-btn.active {
-  background: var(--color-primary);
-  color: white;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  background: rgba(72, 70, 62, 0.15);
+  color: var(--color-text-primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(72, 70, 62, 0.2);
 }
 
 .color-legend {

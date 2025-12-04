@@ -53,14 +53,23 @@ function FloorPlan({
         case "early":
           intensity = 0.1;
           break;
+        case "slightly early":
+          intensity = 0.25;
+          break;
         case "mixed":
           intensity = 0.5;
           break;
+        case "slightly late":
+          intensity = 0.65;
+          break;
         case "late":
-          intensity = 0.9;
+          intensity = 0.8;
+          break;
+        case "very late":
+          intensity = 0.95;
           break;
         default:
-          intensity = 0;
+          intensity = 0.5;
       }
     } else if (activeLens === "varsity") {
       intensity = room.preferences.varsity ? 0.8 : 0.1;
@@ -87,55 +96,6 @@ function FloorPlan({
   return (
     <div className="floor-plan-container">
       <div className="floor-plan-wrapper">
-        {/* Controls row above map */}
-        <div className="map-controls-row">
-          {/* Section tabs on left */}
-          <div className="section-tabs">
-            <span className="section-tabs-label">Sections:</span>
-            <div className="section-tabs-list">
-              {zones &&
-                zones.map((zone) => {
-                  const isSelected = selectedZone?.id === zone.id;
-                  const isApproved = zone.status === "approved";
-
-                  return (
-                    <button
-                      key={zone.id}
-                      className={`section-tab ${isSelected ? "selected" : ""} ${
-                        isApproved ? "approved" : "pending"
-                      }`}
-                      onClick={() => onZoneClick(zone)}
-                    >
-                      {isApproved && <span className="tab-check">✓</span>}
-                      {zone.label}
-                    </button>
-                  );
-                })}
-            </div>
-          </div>
-
-          {/* Floor navigation on right */}
-          <div className="floor-nav">
-            <button
-              className="floor-nav-btn"
-              onClick={() => onChangeFloor(-1)}
-              disabled={currentFloorIndex === 0}
-            >
-              ‹
-            </button>
-            <div className="floor-indicator">
-              <span className="floor-name">{floor.name}</span>
-            </div>
-            <button
-              className="floor-nav-btn"
-              onClick={() => onChangeFloor(1)}
-              disabled={currentFloorIndex === floors.length - 1}
-            >
-              ›
-            </button>
-          </div>
-        </div>
-
         <svg
           className="floor-plan"
           viewBox="0 0 870 460"
@@ -217,6 +177,55 @@ function FloorPlan({
             );
           })}
         </svg>
+
+        {/* Controls row below map */}
+        <div className="map-controls-row">
+          {/* Section tabs on left */}
+          <div className="section-tabs">
+            <span className="section-tabs-label">Sections:</span>
+            <div className="section-tabs-list">
+              {zones &&
+                zones.map((zone) => {
+                  const isSelected = selectedZone?.id === zone.id;
+                  const isApproved = zone.status === "approved";
+
+                  return (
+                    <button
+                      key={zone.id}
+                      className={`section-tab ${isSelected ? "selected" : ""} ${
+                        isApproved ? "approved" : "pending"
+                      }`}
+                      onClick={() => onZoneClick(zone)}
+                    >
+                      {isApproved && <span className="tab-check">✓</span>}
+                      {zone.label}
+                    </button>
+                  );
+                })}
+            </div>
+          </div>
+
+          {/* Floor navigation on right */}
+          <div className="floor-nav">
+            <button
+              className="floor-nav-btn"
+              onClick={() => onChangeFloor(-1)}
+              disabled={currentFloorIndex === 0}
+            >
+              ‹
+            </button>
+            <div className="floor-indicator">
+              <span className="floor-name">{floor.name}</span>
+            </div>
+            <button
+              className="floor-nav-btn"
+              onClick={() => onChangeFloor(1)}
+              disabled={currentFloorIndex === floors.length - 1}
+            >
+              ›
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

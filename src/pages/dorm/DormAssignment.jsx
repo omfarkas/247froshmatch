@@ -5,7 +5,7 @@ import IssuePanel from "./components/IssuePanel";
 import "./DormAssignment.css";
 
 // Mock data for floors and rooms
-// Distribution: ~80% night owls, only 3 athletes/floor, mostly social (7-9) with ~15% shy (2-4)
+// Distribution: ~80% night owls (late/very late/slightly late), only 3 athletes/floor, mostly social (7-9) with ~15% shy (2-4)
 const MOCK_FLOORS = [
   {
     id: 1,
@@ -36,7 +36,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 2,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Gaming", "Music"],
           varsity: false,
         },
@@ -49,7 +49,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 3,
           quiet: 8,
-          sleep: "late",
+          sleep: "slightly late",
           interests: ["Reading", "Art"],
           varsity: false,
         },
@@ -75,7 +75,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Dance", "Writing"],
           varsity: false,
         },
@@ -101,7 +101,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 7,
           quiet: 5,
-          sleep: "late",
+          sleep: "slightly late",
           interests: ["Piano", "Science"],
           varsity: false,
         },
@@ -114,7 +114,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 3,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Theater", "Improv"],
           varsity: false,
         },
@@ -140,7 +140,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Gaming", "Esports"],
           varsity: false,
         },
@@ -155,7 +155,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 7,
           quiet: 5,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Music Production", "DJing"],
           varsity: false,
         },
@@ -181,7 +181,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "late",
+          sleep: "slightly late",
           interests: ["Entrepreneurship", "Tech"],
           varsity: false,
         },
@@ -194,7 +194,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 3,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Dance", "Fashion"],
           varsity: false,
         },
@@ -207,7 +207,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 3,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Gaming", "Streaming"],
           varsity: false,
         },
@@ -220,7 +220,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 3,
           quiet: 8,
-          sleep: "late",
+          sleep: "slightly late",
           interests: ["Library", "Writing"],
           varsity: false,
         },
@@ -246,7 +246,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "late",
+          sleep: "slightly late",
           interests: ["Art", "Photography"],
           varsity: false,
         },
@@ -287,7 +287,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 7,
           quiet: 5,
-          sleep: "late",
+          sleep: "slightly late",
           interests: ["Art", "Hiking"],
           varsity: false,
         },
@@ -313,7 +313,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Baking", "Netflix"],
           varsity: false,
         },
@@ -326,7 +326,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 2,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Party Planning", "Music"],
           varsity: false,
         },
@@ -354,7 +354,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "late",
+          sleep: "slightly late",
           interests: ["Cooking", "Food Photography"],
           varsity: false,
         },
@@ -367,7 +367,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 3,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Art", "Music"],
           varsity: false,
         },
@@ -380,7 +380,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "late",
+          sleep: "slightly early",
           interests: ["Soccer", "Debate"],
           varsity: true,
         },
@@ -395,7 +395,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Gaming", "Coding"],
           varsity: false,
         },
@@ -408,7 +408,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 7,
           quiet: 5,
-          sleep: "late",
+          sleep: "slightly late",
           interests: ["Piano", "Art History"],
           varsity: false,
         },
@@ -434,7 +434,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "late",
+          sleep: "slightly early",
           interests: ["Swimming", "Photography"],
           varsity: true,
         },
@@ -462,7 +462,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "late",
+          sleep: "very late",
           interests: ["Dance", "Fashion"],
           varsity: false,
         },
@@ -488,7 +488,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 3,
           quiet: 8,
-          sleep: "late",
+          sleep: "slightly late",
           interests: ["Reading", "Knitting"],
           varsity: false,
         },
@@ -580,14 +580,35 @@ const generateFloor = (floorNum) => {
     "Allen",
   ];
 
-  // Randomize preferences: ~80% night owls, ~15% shy, only 3 athletes
+  // Randomize preferences: ~80% night owls (varied), ~15% shy, only 3 athletes
   const athleteRooms = [24, 33, 34]; // Only these 3 rooms get athletes
+  const sleepSchedules = [
+    "late",
+    "very late",
+    "slightly late",
+    "late",
+    "very late",
+    "late",
+    "slightly late",
+    "late",
+  ];
 
   baseFloor.rooms = baseFloor.rooms.map((room, idx) => {
     const roomNum = room.id % 100;
     const isAthlete = athleteRooms.includes(roomNum);
     const isShy = [3, 9, 44, 56, 60].includes(roomNum); // ~15% shy
     const isEarlyRiser = roomNum === 9; // Only 1 early riser pair
+    const isSlightlyEarly = roomNum === 24 || roomNum === 34; // Athletes wake earlier
+
+    // Determine sleep schedule with variation
+    let sleep;
+    if (isEarlyRiser) {
+      sleep = "early";
+    } else if (isSlightlyEarly) {
+      sleep = "slightly early";
+    } else {
+      sleep = sleepSchedules[(idx + floorNum) % sleepSchedules.length];
+    }
 
     return {
       ...room,
@@ -603,7 +624,7 @@ const generateFloor = (floorNum) => {
       preferences: {
         ...room.preferences,
         social: isShy ? 2 + (idx % 2) : 7 + (idx % 3),
-        sleep: isEarlyRiser ? "early" : "late",
+        sleep: sleep,
         varsity: isAthlete,
       },
     };
@@ -952,7 +973,7 @@ function DormAssignment() {
           <div>
             <h1 className="dorm-title">Dorm Assignment</h1>
             <p className="dorm-subtitle">
-              Review and adjust assignments with human agency
+              Assign roommate pairs to rooms in Crothers Memorial.
             </p>
           </div>
           <div className="header-controls">
