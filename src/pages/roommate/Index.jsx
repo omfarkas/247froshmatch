@@ -58,7 +58,7 @@ function RoommateIndex() {
       <header className="roommate-header">
         <h1>These students have compatible living habits.</h1>
         <p className="roommate-subheader">
-          Review their full profiles:{" "}
+          View their full profiles:{" "}
           <button className="see-all-info-btn" onClick={handleOpenModal}>
             see all info
           </button>
