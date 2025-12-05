@@ -1,11 +1,14 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import StudentCard from "./StudentCard";
 import ComparisonModal from "./ComparisonModal";
 import { DEMO_MATCHES } from "../../data/students";
+import { useStageContext } from "../../contexts/StageContext";
 import "./Roommate.css";
 
 function RoommateIndex() {
+  const navigate = useNavigate();
+  const { completeStage } = useStageContext();
   const [currentPairIndex, setCurrentPairIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -32,6 +35,7 @@ function RoommateIndex() {
     if (currentPairIndex < DEMO_MATCHES.length - 1) {
       setCurrentPairIndex(currentPairIndex + 1);
     } else {
+      completeStage(1);
       setIsFinished(true);
     }
   };
@@ -40,10 +44,29 @@ function RoommateIndex() {
     return (
       <div className="roommate-page roommate-finished">
         <div className="finished-content">
-          <h1>You finished approving matches!</h1>
-          <Link to="/" className="back-link">
-            ← Back to Dashboard
-          </Link>
+          <h1>You finished reviewing matches!</h1>
+          <p style={{ marginBottom: '20px', color: '#666' }}>
+            {DEMO_MATCHES.length} pairs reviewed
+          </p>
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+            <Link to="/" className="back-link">
+              ← Back to Dashboard
+            </Link>
+            <button
+              onClick={() => navigate('/review-matches')}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#4CAF50',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '16px',
+              }}
+            >
+              Continue to Review Matches →
+            </button>
+          </div>
         </div>
       </div>
     );

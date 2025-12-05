@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import MatchCard from '../components/MatchCard';
 import ProfileCard from '../components/ProfileCard';
 import Toolbar from '../components/Toolbar';
 import TutorialOverlay from '../components/TutorialOverlay';
 import { Search, SlidersHorizontal } from 'lucide-react';
+import { useStageContext } from '../contexts/StageContext';
 import './ReviewMatches.css';
 
 const ReviewMatches = () => {
+  const navigate = useNavigate();
+  const { completeStage } = useStageContext();
+
   // Mock data for matches
   const [matches, setMatches] = useState([
     { id: 1, type: 'match', person1: 'James Y', person2: 'Orlin S', x: 50, y: 50, gender: 'male', rating: 4, notes: 'good pairing, both like horseback riding + exactly same sleep, James more clean than Orlin', location: 'sidebar' },
@@ -469,8 +474,33 @@ const ReviewMatches = () => {
   const sidebarProfiles = filteredProfiles.filter(p => p.location === 'sidebar');
   const canvasProfiles = filteredProfiles.filter(p => p.location !== 'sidebar');
 
+  const handleContinueToDorm = () => {
+    completeStage(2);
+    navigate('/dorm');
+  };
+
   return (
     <div className="review-matches-container">
+      <div style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Link to="/" className="back-link">
+          ← Back to Dashboard
+        </Link>
+        <button
+          onClick={handleContinueToDorm}
+          style={{
+            padding: '12px 24px',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: 'bold',
+          }}
+        >
+          Continue to Dorm Assignment →
+        </button>
+      </div>
       
       <div className="split-layout">
         {/* Left Sidebar */}

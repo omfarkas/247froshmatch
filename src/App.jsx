@@ -1,4 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
+import { StageProvider } from './contexts/StageContext'
+import ProtectedRoute from './components/ProtectedRoute'
 import Header from './components/Header'
 import Home from './pages/Home'
 import RoommateIndex from './pages/roommate/Index'
@@ -8,18 +10,41 @@ import DormIndex from './pages/dorm/Index'
 
 function App() {
   return (
-    <div className="app">
-      <Header />
-      <main className="main-content">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/review-matches" element={<ReviewMatches />} />
-          <Route path="/roommate/*" element={<RoommateIndex />} />
-          <Route path="/review/*" element={<ReviewIndex />} />
-          <Route path="/dorm/*" element={<DormIndex />} />
-        </Routes>
-      </main>
-    </div>
+    <StageProvider>
+      <div className="app">
+        <Header />
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/roommate/*" element={<RoommateIndex />} />
+            <Route 
+              path="/review-matches" 
+              element={
+                <ProtectedRoute requiredStage={2}>
+                  <ReviewMatches />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/review/*" 
+              element={
+                <ProtectedRoute requiredStage={2}>
+                  <ReviewIndex />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/dorm/*" 
+              element={
+                <ProtectedRoute requiredStage={3}>
+                  <DormIndex />
+                </ProtectedRoute>
+              } 
+            />
+          </Routes>
+        </main>
+      </div>
+    </StageProvider>
   )
 }
 

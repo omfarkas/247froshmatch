@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import FloorPlan from "./components/FloorPlan";
 import IssuePanel from "./components/IssuePanel";
+import { useStageContext } from "../../contexts/StageContext";
 import "./DormAssignment.css";
 
 // Mock data for floors and rooms
@@ -748,6 +749,7 @@ const createInitialZones = (floorId) => [
 
 function DormAssignment() {
   const navigate = useNavigate();
+  const { completeStage } = useStageContext();
   const [currentFloorIndex, setCurrentFloorIndex] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [selectedZone, setSelectedZone] = useState(null);
@@ -963,6 +965,13 @@ function DormAssignment() {
     return insights.slice(0, 4); // Limit to 4 most relevant
   };
 
+  // Mark stage 3 as complete when all floors are done
+  useEffect(() => {
+    if (allFloorsComplete) {
+      completeStage(3);
+    }
+  }, [allFloorsComplete]);
+
   if (allFloorsComplete) {
     return (
       <div className="dorm-assignment completion-screen">
@@ -983,6 +992,11 @@ function DormAssignment() {
 
   return (
     <div className="dorm-assignment">
+      <div style={{ padding: "20px" }}>
+        <Link to="/" className="back-link">
+          ← Back to Dashboard
+        </Link>
+      </div>
       <div className="dorm-header">
         <div className="header-content">
           <div>

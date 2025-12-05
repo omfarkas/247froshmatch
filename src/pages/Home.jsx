@@ -1,4 +1,5 @@
 import DashboardCard from "../components/DashboardCard";
+import { useStageContext } from "../contexts/StageContext";
 
 // Icons matching the wireframe
 const RoommateIcon = () => (
@@ -101,9 +102,27 @@ const DEMO_DATA = {
 };
 
 function Home() {
+  const { canAccessStage, isStageComplete, resetStages } = useStageContext();
+
   return (
     <div className="home-page">
-      <h1 className="page-title">Welcome back, Resident Director</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <h1 className="page-title" style={{ marginBottom: 0 }}>Welcome back, Resident Director</h1>
+        <button
+          onClick={resetStages}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#f44336',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontSize: '14px',
+          }}
+        >
+          Reset Demo
+        </button>
+      </div>
 
       <div className="card-grid">
         <DashboardCard
@@ -112,6 +131,8 @@ function Home() {
           current={DEMO_DATA.roommate.current}
           total={DEMO_DATA.roommate.total}
           to="/roommate"
+          locked={false}
+          completed={isStageComplete(1)}
         />
 
         <DashboardCard
@@ -120,6 +141,8 @@ function Home() {
           current={DEMO_DATA.review.current}
           total={DEMO_DATA.review.total}
           to="/review-matches"
+          locked={!canAccessStage(2)}
+          completed={isStageComplete(2)}
         />
 
         <DashboardCard
@@ -128,6 +151,8 @@ function Home() {
           current={DEMO_DATA.dorm.current}
           total={DEMO_DATA.dorm.total}
           to="/dorm"
+          locked={!canAccessStage(3)}
+          completed={isStageComplete(3)}
         />
       </div>
     </div>
