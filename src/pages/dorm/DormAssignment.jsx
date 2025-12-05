@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import FloorPlan from "./components/FloorPlan";
 import IssuePanel from "./components/IssuePanel";
 import { useStageContext } from "../../contexts/StageContext";
+import { STUDENTS } from "../../data/students";
 import "./DormAssignment.css";
 
 // Mock data for floors and rooms
-// Distribution: ~80% night owls (late/very late/slightly late), only 3 athletes/floor, mostly social (7-9) with ~15% shy (2-4)
+// Distribution: ~80% night owls, only 3 athletes/floor, mostly social (7-9) with ~15% shy (2-4)
 const MOCK_FLOORS = [
   {
     id: 1,
@@ -20,12 +21,12 @@ const MOCK_FLOORS = [
         id: 101,
         zone: "North Hall",
         position: { x: 140, y: 20 },
-        students: ["Emma Chen", "Sofia Rodriguez"],
+        students: [STUDENTS.joeyChestnut, STUDENTS.steveIrwin],
         preferences: {
-          social: 8,
-          quiet: 3,
-          sleep: "late",
-          interests: ["Photography", "Coffee"],
+          social: 4,
+          quiet: 8,
+          sleep: "early",
+          interests: ["Ultimate Frisbee", "Nature", "Outdoors"],
           varsity: false,
         },
       },
@@ -33,12 +34,12 @@ const MOCK_FLOORS = [
         id: 102,
         zone: "North Hall",
         position: { x: 200, y: 20 },
-        students: ["Marcus Johnson", "Aiden Park"],
+        students: [STUDENTS.barackObama, STUDENTS.mittRomney],
         preferences: {
-          social: 9,
-          quiet: 2,
-          sleep: "very late",
-          interests: ["Gaming", "Music"],
+          social: 7,
+          quiet: 5,
+          sleep: "late",
+          interests: ["Politics", "Public Policy", "Leadership"],
           varsity: false,
         },
       },
@@ -46,12 +47,12 @@ const MOCK_FLOORS = [
         id: 103,
         zone: "North Hall",
         position: { x: 260, y: 20 },
-        students: ["Olivia Martinez", "Zoe Kim"],
+        students: [STUDENTS.taylorSwift, STUDENTS.sabrinaCarpenter],
         preferences: {
-          social: 3,
-          quiet: 8,
-          sleep: "slightly late",
-          interests: ["Reading", "Art"],
+          social: 8,
+          quiet: 4,
+          sleep: "very late",
+          interests: ["Music", "Songwriting", "Theater"],
           varsity: false,
         },
       },
@@ -102,7 +103,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 7,
           quiet: 5,
-          sleep: "slightly late",
+          sleep: "late",
           interests: ["Piano", "Science"],
           varsity: false,
         },
@@ -115,7 +116,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 3,
-          sleep: "very late",
+          sleep: "late",
           interests: ["Theater", "Improv"],
           varsity: false,
         },
@@ -141,7 +142,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "very late",
+          sleep: "late",
           interests: ["Gaming", "Esports"],
           varsity: false,
         },
@@ -156,7 +157,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 7,
           quiet: 5,
-          sleep: "very late",
+          sleep: "late",
           interests: ["Music Production", "DJing"],
           varsity: false,
         },
@@ -182,7 +183,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "slightly late",
+          sleep: "late",
           interests: ["Entrepreneurship", "Tech"],
           varsity: false,
         },
@@ -195,7 +196,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 3,
-          sleep: "very late",
+          sleep: "late",
           interests: ["Dance", "Fashion"],
           varsity: false,
         },
@@ -208,7 +209,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 3,
-          sleep: "very late",
+          sleep: "late",
           interests: ["Gaming", "Streaming"],
           varsity: false,
         },
@@ -221,7 +222,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 3,
           quiet: 8,
-          sleep: "slightly late",
+          sleep: "late",
           interests: ["Library", "Writing"],
           varsity: false,
         },
@@ -247,7 +248,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "slightly late",
+          sleep: "late",
           interests: ["Art", "Photography"],
           varsity: false,
         },
@@ -288,7 +289,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 7,
           quiet: 5,
-          sleep: "slightly late",
+          sleep: "late",
           interests: ["Art", "Hiking"],
           varsity: false,
         },
@@ -314,7 +315,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "very late",
+          sleep: "late",
           interests: ["Baking", "Netflix"],
           varsity: false,
         },
@@ -355,7 +356,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "slightly late",
+          sleep: "late",
           interests: ["Cooking", "Food Photography"],
           varsity: false,
         },
@@ -368,7 +369,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 3,
-          sleep: "very late",
+          sleep: "late",
           interests: ["Art", "Music"],
           varsity: false,
         },
@@ -381,7 +382,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "slightly early",
+          sleep: "late",
           interests: ["Soccer", "Debate"],
           varsity: true,
         },
@@ -396,7 +397,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "very late",
+          sleep: "late",
           interests: ["Gaming", "Coding"],
           varsity: false,
         },
@@ -409,7 +410,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 7,
           quiet: 5,
-          sleep: "slightly late",
+          sleep: "late",
           interests: ["Piano", "Art History"],
           varsity: false,
         },
@@ -435,7 +436,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "slightly early",
+          sleep: "late",
           interests: ["Swimming", "Photography"],
           varsity: true,
         },
@@ -463,7 +464,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 8,
           quiet: 4,
-          sleep: "very late",
+          sleep: "late",
           interests: ["Dance", "Fashion"],
           varsity: false,
         },
@@ -489,7 +490,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 3,
           quiet: 8,
-          sleep: "slightly late",
+          sleep: "late",
           interests: ["Reading", "Knitting"],
           varsity: false,
         },
@@ -581,35 +582,14 @@ const generateFloor = (floorNum) => {
     "Allen",
   ];
 
-  // Randomize preferences: ~80% night owls (varied), ~15% shy, only 3 athletes
+  // Randomize preferences: ~80% night owls, ~15% shy, only 3 athletes
   const athleteRooms = [24, 33, 34]; // Only these 3 rooms get athletes
-  const sleepSchedules = [
-    "late",
-    "very late",
-    "slightly late",
-    "late",
-    "very late",
-    "late",
-    "slightly late",
-    "late",
-  ];
 
   baseFloor.rooms = baseFloor.rooms.map((room, idx) => {
     const roomNum = room.id % 100;
     const isAthlete = athleteRooms.includes(roomNum);
     const isShy = [3, 9, 44, 56, 60].includes(roomNum); // ~15% shy
     const isEarlyRiser = roomNum === 9; // Only 1 early riser pair
-    const isSlightlyEarly = roomNum === 24 || roomNum === 34; // Athletes wake earlier
-
-    // Determine sleep schedule with variation
-    let sleep;
-    if (isEarlyRiser) {
-      sleep = "early";
-    } else if (isSlightlyEarly) {
-      sleep = "slightly early";
-    } else {
-      sleep = sleepSchedules[(idx + floorNum) % sleepSchedules.length];
-    }
 
     return {
       ...room,
@@ -625,7 +605,7 @@ const generateFloor = (floorNum) => {
       preferences: {
         ...room.preferences,
         social: isShy ? 2 + (idx % 2) : 7 + (idx % 3),
-        sleep: sleep,
+        sleep: isEarlyRiser ? "early" : "late",
         varsity: isAthlete,
       },
     };
@@ -806,12 +786,7 @@ function DormAssignment() {
   };
 
   const handleZoneClick = (zone) => {
-    // If clicking the same zone, deselect it
-    if (selectedZone?.id === zone.id) {
-      setSelectedZone(null);
-    } else {
-      setSelectedZone(zone);
-    }
+    setSelectedZone(zone);
     setSelectedRoom(null);
     setSwapSource(null);
   };
@@ -821,16 +796,6 @@ function DormAssignment() {
       ...prev,
       [currentFloor.id]: prev[currentFloor.id].map((z) =>
         z.id === zoneId ? { ...z, status: "approved" } : z
-      ),
-    }));
-    setSelectedZone(null);
-  };
-
-  const handleUnapproveZone = (zoneId) => {
-    setAllZones((prev) => ({
-      ...prev,
-      [currentFloor.id]: prev[currentFloor.id].map((z) =>
-        z.id === zoneId ? { ...z, status: "pending" } : z
       ),
     }));
     setSelectedZone(null);
@@ -992,17 +957,12 @@ function DormAssignment() {
 
   return (
     <div className="dorm-assignment">
-      <div style={{ padding: "20px" }}>
-        <Link to="/" className="back-link">
-          ← Back to Dashboard
-        </Link>
-      </div>
       <div className="dorm-header">
         <div className="header-content">
           <div>
             <h1 className="dorm-title">Dorm Assignment</h1>
             <p className="dorm-subtitle">
-              Assign roommate pairs to rooms in Crothers Memorial.
+              Assign roommate pairs to rooms across all 3 floors.
             </p>
           </div>
           <div className="header-controls">
@@ -1086,7 +1046,6 @@ function DormAssignment() {
           zoneRooms={selectedZone ? getRoomsForZone(selectedZone) : []}
           roomContext={selectedRoom ? getRoomContext(selectedRoom) : []}
           onApproveZone={handleApproveZone}
-          onUnapproveZone={handleUnapproveZone}
           onClose={() => {
             setSelectedRoom(null);
             setSelectedZone(null);
@@ -1109,51 +1068,11 @@ function DormAssignment() {
               <div className="swap-room">
                 <strong>Room {swapSource.id}</strong>
                 <p>{swapSource.students.join(" & ")}</p>
-                <div className="swap-room-habits">
-                  <div className="habit-item">
-                    <span className="habit-label">Social:</span>
-                    <span className="habit-value">
-                      {swapSource.preferences.social}/10
-                    </span>
-                  </div>
-                  <div className="habit-item">
-                    <span className="habit-label">Sleep:</span>
-                    <span className="habit-value capitalize">
-                      {swapSource.preferences.sleep}
-                    </span>
-                  </div>
-                  <div className="habit-item">
-                    <span className="habit-label">Athlete:</span>
-                    <span className="habit-value">
-                      {swapSource.preferences.varsity ? "Yes" : "No"}
-                    </span>
-                  </div>
-                </div>
               </div>
               <div className="swap-arrow">⇄</div>
               <div className="swap-room">
                 <strong>Room {swapTarget.id}</strong>
                 <p>{swapTarget.students.join(" & ")}</p>
-                <div className="swap-room-habits">
-                  <div className="habit-item">
-                    <span className="habit-label">Social:</span>
-                    <span className="habit-value">
-                      {swapTarget.preferences.social}/10
-                    </span>
-                  </div>
-                  <div className="habit-item">
-                    <span className="habit-label">Sleep:</span>
-                    <span className="habit-value capitalize">
-                      {swapTarget.preferences.sleep}
-                    </span>
-                  </div>
-                  <div className="habit-item">
-                    <span className="habit-label">Athlete:</span>
-                    <span className="habit-value">
-                      {swapTarget.preferences.varsity ? "Yes" : "No"}
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
             <div className="swap-actions">

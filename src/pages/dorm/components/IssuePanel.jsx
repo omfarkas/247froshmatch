@@ -129,7 +129,7 @@ function IssuePanel({
     return (
       <div className="issue-panel swap-mode">
         <div className="panel-header">
-          <h3 className="panel-title">Room {swapSource.id}</h3>
+          <h3 className="panel-title">Swapping Room {swapSource.id}</h3>
           <button
             className="close-btn"
             onClick={onCancelSwap}
@@ -139,35 +139,37 @@ function IssuePanel({
           </button>
         </div>
         <div className="panel-content">
-          <div className="swap-source-card">
-            <span className="swap-label">Swapping Room</span>
-            <h4>Room {swapSource.id}</h4>
-            <p className="students">{swapSource.students.join(" & ")}</p>
-          </div>
-
-          <div className="swap-room-stats">
-            <h4>Current Room Info</h4>
-            <div className="mini-stats">
-              <div className="mini-stat">
-                <span>Social</span>
-                <strong>{swapSource.preferences.social}/10</strong>
-              </div>
-              <div className="mini-stat">
-                <span>Sleep</span>
-                <strong className="capitalize">
-                  {swapSource.preferences.sleep}
-                </strong>
-              </div>
-              <div className="mini-stat">
-                <span>Athlete</span>
-                <strong>{swapSource.preferences.varsity ? "Yes" : "No"}</strong>
-              </div>
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
+            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '11px', color: '#666' }}>Social</div>
+              <div style={{ fontWeight: 'bold' }}>{swapSource.preferences.social}/10</div>
+            </div>
+            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '11px', color: '#666' }}>Sleep</div>
+              <div style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>{swapSource.preferences.sleep}</div>
+            </div>
+            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '11px', color: '#666' }}>Athlete</div>
+              <div style={{ fontWeight: 'bold' }}>{swapSource.preferences.varsity ? "Yes" : "No"}</div>
             </div>
           </div>
+          <p style={{ fontSize: '12px', color: '#666', textAlign: 'center' }}>Click another room to swap</p>
         </div>
       </div>
     );
   }
+
+  // Helper to get student display info
+  const getStudentInfo = (student) => {
+    if (typeof student === 'string') return { name: student, location: null };
+    if (student && student.firstName) {
+      return { 
+        name: `${student.firstName} ${student.lastName}`,
+        location: student.location || student.city
+      };
+    }
+    return { name: 'Unknown', location: null };
+  };
 
   // Room info display
   if (selectedRoom) {
@@ -181,84 +183,67 @@ function IssuePanel({
         </div>
 
         <div className="panel-content">
-          <div className="room-info-section">
-            <h4 className="section-title">Occupants</h4>
-            <div className="wireframe-box">
-              <p className="wireframe-text">
-                {selectedRoom.students.join(" & ")}
-              </p>
+          {/* Occupants */}
+          <div style={{ marginBottom: '12px' }}>
+            {selectedRoom.students.map((student, idx) => {
+              const info = getStudentInfo(student);
+              return (
+                <div key={idx} style={{ marginBottom: '6px' }}>
+                  <span style={{ fontWeight: '600' }}>{info.name}</span>
+                  {info.location && (
+                    <span style={{ color: '#666', fontSize: '12px', marginLeft: '6px' }}>
+                      — {info.location}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Compact stats row */}
+          <div className="compact-stats" style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
+            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '11px', color: '#666' }}>Social</div>
+              <div style={{ fontWeight: 'bold' }}>{selectedRoom.preferences.social}/10</div>
+            </div>
+            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '11px', color: '#666' }}>Sleep</div>
+              <div style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>{selectedRoom.preferences.sleep}</div>
+            </div>
+            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
+              <div style={{ fontSize: '11px', color: '#666' }}>Athlete</div>
+              <div style={{ fontWeight: 'bold' }}>{selectedRoom.preferences.varsity ? "Yes" : "No"}</div>
             </div>
           </div>
 
-          <div className="room-info-section">
-            <h4 className="section-title">Room Attributes</h4>
-            <div className="lens-stats">
-              <div
-                className={`stat-item ${
-                  activeLens === "social" ? "highlight" : ""
-                }`}
-              >
-                <span className="stat-label">Social Energy</span>
-                <span className="stat-value">
-                  {selectedRoom.preferences.social}/10
-                </span>
-              </div>
-              <div
-                className={`stat-item ${
-                  activeLens === "sleep" ? "highlight" : ""
-                }`}
-              >
-                <span className="stat-label">Sleep Schedule</span>
-                <span className="stat-value capitalize">
-                  {selectedRoom.preferences.sleep}
-                </span>
-              </div>
-              <div
-                className={`stat-item ${
-                  activeLens === "varsity" ? "highlight" : ""
-                }`}
-              >
-                <span className="stat-label">Varsity Status</span>
-                <span className="stat-value">
-                  {selectedRoom.preferences.varsity ? "Athlete" : "Non-Athlete"}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {roomContext && roomContext.length > 0 && (
-            <div className="room-info-section">
-              <h4 className="section-title">Location Considerations</h4>
-              <ul className="context-list">
-                {roomContext.map((insight, i) => (
-                  <li key={i} className="context-item">
-                    <span className="context-icon">📍</span>
-                    {insight}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <div className="room-info-section">
-            <h4 className="section-title">Interests</h4>
-            <div className="tags">
+          {/* Interests with header */}
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ fontSize: '11px', color: '#666', marginBottom: '6px', fontWeight: '500' }}>Interests</div>
+            <div className="tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {selectedRoom.preferences.interests.map((interest, i) => (
-                <span key={i} className="tag">
+                <span key={i} className="tag" style={{ fontSize: '11px', padding: '4px 8px' }}>
                   {interest}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="panel-actions">
-            <button
-              className="action-btn primary"
-              onClick={() => onInitiateSwap(selectedRoom)}
-            >
-              Swap This Room
-            </button>
-          </div>
+          {/* Location insights - condensed */}
+          {roomContext && roomContext.length > 0 && (
+            <div style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
+              {roomContext.slice(0, 2).map((insight, i) => (
+                <div key={i} style={{ marginBottom: '4px' }}>📍 {insight}</div>
+              ))}
+            </div>
+          )}
+
+          <button
+            className="action-btn primary"
+            onClick={() => onInitiateSwap(selectedRoom)}
+            style={{ width: '100%' }}
+          >
+            Swap This Room
+          </button>
         </div>
       </div>
     );
