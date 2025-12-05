@@ -119,7 +119,7 @@ function Home() {
           icon={<ReviewIcon />}
           current={DEMO_DATA.review.current}
           total={DEMO_DATA.review.total}
-          to="/review"
+          to="/review-matches"
         />
 
         <DashboardCard
