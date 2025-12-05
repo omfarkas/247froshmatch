@@ -162,11 +162,11 @@
 }
 
 .gradient-bar.sleep-gradient {
-  background: linear-gradient(to right, #fff8e1, #9575cd, #5e35b1);
+  background: linear-gradient(to right, #f5f0e6, #e87461, #8c1515);
 }
 
 .gradient-bar.varsity-gradient {
-  background: linear-gradient(to right, #f5f0e6, #5d9f6c, #2e6f40);
+  background: linear-gradient(to right, #f5f0e6, #e87461, #8c1515);
 }
 
 .dorm-content {
@@ -205,7 +205,7 @@
   background: var(--color-surface);
   border-radius: 20px;
   padding: 2rem 2.5rem;
-  max-width: 440px;
+  max-width: 500px;
   width: 90%;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
   border: 2px solid #8c1515;
@@ -244,9 +244,39 @@
 }
 
 .swap-room p {
-  margin: 0;
+  margin: 0 0 0.75rem;
   font-size: 0.85rem;
   color: var(--color-text-secondary);
+}
+
+.swap-room-habits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.habit-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.habit-label {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.habit-value {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.habit-value.capitalize {
+  text-transform: capitalize;
 }
 
 .swap-arrow {
@@ -356,4 +386,9 @@
 .completion-btn:hover {
   filter: brightness(1.1);
   transform: translateY(-2px);
+}
+
+/* Utility classes */
+.capitalize {
+  text-transform: capitalize;
 }

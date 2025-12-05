@@ -6,6 +6,7 @@ function IssuePanel({
   zoneRooms,
   roomContext,
   onApproveZone,
+  onUnapproveZone,
   onClose,
   activeLens,
   swapSource,
@@ -90,9 +91,12 @@ function IssuePanel({
                 ✓ Approve This Section
               </button>
             ) : (
-              <div className="approved-indicator">
-                <span>✓ Section Approved</span>
-              </div>
+              <button
+                className="action-btn unapprove"
+                onClick={() => onUnapproveZone(selectedZone.id)}
+              >
+                ↻ Unapprove Section
+              </button>
             )}
           </div>
         </div>
@@ -124,8 +128,8 @@ function IssuePanel({
   if (swapSource) {
     return (
       <div className="issue-panel swap-mode">
-        <div className="panel-header swap-header">
-          <div className="swap-mode-badge">SWAP MODE</div>
+        <div className="panel-header">
+          <h3 className="panel-title">Room {swapSource.id}</h3>
           <button
             className="close-btn"
             onClick={onCancelSwap}
@@ -139,11 +143,6 @@ function IssuePanel({
             <span className="swap-label">Swapping Room</span>
             <h4>Room {swapSource.id}</h4>
             <p className="students">{swapSource.students.join(" & ")}</p>
-          </div>
-
-          <div className="swap-instruction-box">
-            <div className="swap-arrow-icon">→</div>
-            <p>Click another room on the floor plan to complete the swap</p>
           </div>
 
           <div className="swap-room-stats">
@@ -165,10 +164,6 @@ function IssuePanel({
               </div>
             </div>
           </div>
-
-          <button className="action-btn cancel" onClick={onCancelSwap}>
-            Cancel Swap
-          </button>
         </div>
       </div>
     );
@@ -261,7 +256,7 @@ function IssuePanel({
               className="action-btn primary"
               onClick={() => onInitiateSwap(selectedRoom)}
             >
-              ⇄ Swap This Room
+              Swap This Room
             </button>
           </div>
         </div>

@@ -44,6 +44,11 @@ function FloorPlan({
   const getRoomStyle = (room) => {
     if (activeLens === "none") return {};
 
+    // Check if room is in an approved zone
+    const roomZoneType = getZoneTypeForRoom(room);
+    const roomZone = zones?.find((z) => getZoneType(z.id) === roomZoneType);
+    const isApproved = roomZone?.status === "approved";
+
     let intensity = 0;
 
     if (activeLens === "social") {
@@ -77,27 +82,20 @@ function FloorPlan({
 
     let r, g, b;
 
-    if (activeLens === "social") {
-      // Social gradient: Light cream (#F5F0E6) -> Coral (#E87461) -> Stanford Red (#8C1515)
-      // Low social: 245, 240, 230
-      // High social: 140, 21, 21
+    if (isApproved) {
+      // Pale green gradient for approved sections: Very light mint -> Soft sage green
+      // Low: 235, 245, 235
+      // High: 180, 210, 185
+      r = Math.round(235 - intensity * (235 - 180));
+      g = Math.round(245 - intensity * (245 - 210));
+      b = Math.round(235 - intensity * (235 - 185));
+    } else {
+      // All lenses use the same red gradient: Light cream -> Coral -> Stanford Red
+      // Low: 245, 240, 230
+      // High: 140, 21, 21
       r = Math.round(245 - intensity * (245 - 140));
       g = Math.round(240 - intensity * (240 - 21));
       b = Math.round(230 - intensity * (230 - 21));
-    } else if (activeLens === "sleep") {
-      // Sleep gradient: Light yellow/cream (#FFF8E1) -> Lavender (#9575CD) -> Deep purple (#5E35B1)
-      // Early: 255, 248, 225
-      // Late: 94, 53, 177
-      r = Math.round(255 - intensity * (255 - 94));
-      g = Math.round(248 - intensity * (248 - 53));
-      b = Math.round(225 - intensity * (225 - 177));
-    } else if (activeLens === "varsity") {
-      // Athletes gradient: Light cream (#F5F0E6) -> Turf Green (#2E6F40)
-      // Non-athlete: 245, 240, 230
-      // Athlete: 46, 111, 64
-      r = Math.round(245 - intensity * (245 - 46));
-      g = Math.round(240 - intensity * (240 - 111));
-      b = Math.round(230 - intensity * (230 - 64));
     }
 
     const strokeR = Math.max(r - 35, 40);
@@ -119,6 +117,55 @@ function FloorPlan({
   return (
     <div className="floor-plan-container">
       <div className="floor-plan-wrapper">
+        {/* Controls row above map */}
+        <div className="map-controls-row">
+          {/* Section tabs on left */}
+          <div className="section-tabs">
+            <span className="section-tabs-label">Sections:</span>
+            <div className="section-tabs-list">
+              {zones &&
+                zones.map((zone) => {
+                  const isSelected = selectedZone?.id === zone.id;
+                  const isApproved = zone.status === "approved";
+
+                  return (
+                    <button
+                      key={zone.id}
+                      className={`section-tab ${isSelected ? "selected" : ""} ${
+                        isApproved ? "approved" : "pending"
+                      }`}
+                      onClick={() => onZoneClick(zone)}
+                    >
+                      {isApproved && <span className="tab-check">✓</span>}
+                      {zone.label}
+                    </button>
+                  );
+                })}
+            </div>
+          </div>
+
+          {/* Floor navigation on right */}
+          <div className="floor-nav">
+            <button
+              className="floor-nav-btn"
+              onClick={() => onChangeFloor(-1)}
+              disabled={currentFloorIndex === 0}
+            >
+              ‹
+            </button>
+            <div className="floor-indicator">
+              <span className="floor-name">{floor.name}</span>
+            </div>
+            <button
+              className="floor-nav-btn"
+              onClick={() => onChangeFloor(1)}
+              disabled={currentFloorIndex === floors.length - 1}
+            >
+              ›
+            </button>
+          </div>
+        </div>
+
         <svg
           className="floor-plan"
           viewBox="0 0 870 460"
@@ -205,55 +252,6 @@ function FloorPlan({
             );
           })}
         </svg>
-
-        {/* Controls row below map */}
-        <div className="map-controls-row">
-          {/* Section tabs on left */}
-          <div className="section-tabs">
-            <span className="section-tabs-label">Sections:</span>
-            <div className="section-tabs-list">
-              {zones &&
-                zones.map((zone) => {
-                  const isSelected = selectedZone?.id === zone.id;
-                  const isApproved = zone.status === "approved";
-
-                  return (
-                    <button
-                      key={zone.id}
-                      className={`section-tab ${isSelected ? "selected" : ""} ${
-                        isApproved ? "approved" : "pending"
-                      }`}
-                      onClick={() => onZoneClick(zone)}
-                    >
-                      {isApproved && <span className="tab-check">✓</span>}
-                      {zone.label}
-                    </button>
-                  );
-                })}
-            </div>
-          </div>
-
-          {/* Floor navigation on right */}
-          <div className="floor-nav">
-            <button
-              className="floor-nav-btn"
-              onClick={() => onChangeFloor(-1)}
-              disabled={currentFloorIndex === 0}
-            >
-              ‹
-            </button>
-            <div className="floor-indicator">
-              <span className="floor-name">{floor.name}</span>
-            </div>
-            <button
-              className="floor-nav-btn"
-              onClick={() => onChangeFloor(1)}
-              disabled={currentFloorIndex === floors.length - 1}
-            >
-              ›
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -804,7 +804,12 @@ function DormAssignment() {
   };
 
   const handleZoneClick = (zone) => {
-    setSelectedZone(zone);
+    // If clicking the same zone, deselect it
+    if (selectedZone?.id === zone.id) {
+      setSelectedZone(null);
+    } else {
+      setSelectedZone(zone);
+    }
     setSelectedRoom(null);
     setSwapSource(null);
   };
@@ -814,6 +819,16 @@ function DormAssignment() {
       ...prev,
       [currentFloor.id]: prev[currentFloor.id].map((z) =>
         z.id === zoneId ? { ...z, status: "approved" } : z
+      ),
+    }));
+    setSelectedZone(null);
+  };
+
+  const handleUnapproveZone = (zoneId) => {
+    setAllZones((prev) => ({
+      ...prev,
+      [currentFloor.id]: prev[currentFloor.id].map((z) =>
+        z.id === zoneId ? { ...z, status: "pending" } : z
       ),
     }));
     setSelectedZone(null);
@@ -1057,6 +1072,7 @@ function DormAssignment() {
           zoneRooms={selectedZone ? getRoomsForZone(selectedZone) : []}
           roomContext={selectedRoom ? getRoomContext(selectedRoom) : []}
           onApproveZone={handleApproveZone}
+          onUnapproveZone={handleUnapproveZone}
           onClose={() => {
             setSelectedRoom(null);
             setSelectedZone(null);
@@ -1079,11 +1095,51 @@ function DormAssignment() {
               <div className="swap-room">
                 <strong>Room {swapSource.id}</strong>
                 <p>{swapSource.students.join(" & ")}</p>
+                <div className="swap-room-habits">
+                  <div className="habit-item">
+                    <span className="habit-label">Social:</span>
+                    <span className="habit-value">
+                      {swapSource.preferences.social}/10
+                    </span>
+                  </div>
+                  <div className="habit-item">
+                    <span className="habit-label">Sleep:</span>
+                    <span className="habit-value capitalize">
+                      {swapSource.preferences.sleep}
+                    </span>
+                  </div>
+                  <div className="habit-item">
+                    <span className="habit-label">Athlete:</span>
+                    <span className="habit-value">
+                      {swapSource.preferences.varsity ? "Yes" : "No"}
+                    </span>
+                  </div>
+                </div>
               </div>
               <div className="swap-arrow">⇄</div>
               <div className="swap-room">
                 <strong>Room {swapTarget.id}</strong>
                 <p>{swapTarget.students.join(" & ")}</p>
+                <div className="swap-room-habits">
+                  <div className="habit-item">
+                    <span className="habit-label">Social:</span>
+                    <span className="habit-value">
+                      {swapTarget.preferences.social}/10
+                    </span>
+                  </div>
+                  <div className="habit-item">
+                    <span className="habit-label">Sleep:</span>
+                    <span className="habit-value capitalize">
+                      {swapTarget.preferences.sleep}
+                    </span>
+                  </div>
+                  <div className="habit-item">
+                    <span className="habit-label">Athlete:</span>
+                    <span className="habit-value">
+                      {swapTarget.preferences.varsity ? "Yes" : "No"}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="swap-actions">

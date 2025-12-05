@@ -381,15 +381,12 @@
   font-weight: 700;
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(140, 21, 21, 0.4);
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
 .action-btn.primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(140, 21, 21, 0.5);
-  filter: brightness(1.05);
+  filter: brightness(1.1);
 }
 
 .action-btn.cancel {
@@ -647,4 +644,24 @@
   transform: translateY(-1px);
   box-shadow: 0 4px 14px rgba(46, 111, 64, 0.5);
   filter: brightness(1.05);
+}
+
+.action-btn.unapprove {
+  width: 100%;
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 2px solid var(--color-border);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.action-btn.unapprove:hover {
+  background: #f5f0e6;
+  border-color: #48463e;
+  filter: brightness(0.98);
 }
