@@ -76,8 +76,7 @@
 .room.zone-highlight {
   stroke: #8c1515 !important;
   stroke-width: 3;
-  fill: rgba(140, 21, 21, 0.15) !important;
-  filter: drop-shadow(0 0 6px rgba(140, 21, 21, 0.4));
+  filter: brightness(1.1) drop-shadow(0 0 6px rgba(140, 21, 21, 0.4));
 }
 
 /* Strong swap source indicator */

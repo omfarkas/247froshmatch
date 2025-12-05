@@ -326,7 +326,7 @@ const MOCK_FLOORS = [
         preferences: {
           social: 9,
           quiet: 2,
-          sleep: "very late",
+          sleep: "late",
           interests: ["Party Planning", "Music"],
           varsity: false,
         },
@@ -1024,7 +1024,7 @@ function DormAssignment() {
               <div className="color-legend">
                 <div className="legend-gradient">
                   <span className="legend-text">{legendLabels.low}</span>
-                  <div className="gradient-bar"></div>
+                  <div className={`gradient-bar ${activeLens}-gradient`}></div>
                   <span className="legend-text">{legendLabels.high}</span>
                 </div>
               </div>

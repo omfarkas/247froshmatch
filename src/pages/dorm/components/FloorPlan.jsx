@@ -75,20 +75,43 @@ function FloorPlan({
       intensity = room.preferences.varsity ? 0.8 : 0.1;
     }
 
-    // Stanford palette gradient: Eggshell (#F8F0DD) -> Charcoal Brown (#48463E)
-    // RGB for Eggshell: 248, 240, 221
-    // RGB for Charcoal Brown: 72, 70, 62
-    const r = Math.round(248 - intensity * (248 - 72));
-    const g = Math.round(240 - intensity * (240 - 70));
-    const b = Math.round(221 - intensity * (221 - 62));
+    let r, g, b;
 
-    const strokeR = Math.max(r - 30, 50);
-    const strokeG = Math.max(g - 30, 50);
-    const strokeB = Math.max(b - 30, 45);
+    if (activeLens === "social") {
+      // Social gradient: Light cream (#F5F0E6) -> Coral (#E87461) -> Stanford Red (#8C1515)
+      // Low social: 245, 240, 230
+      // High social: 140, 21, 21
+      r = Math.round(245 - intensity * (245 - 140));
+      g = Math.round(240 - intensity * (240 - 21));
+      b = Math.round(230 - intensity * (230 - 21));
+    } else if (activeLens === "sleep") {
+      // Sleep gradient: Light yellow/cream (#FFF8E1) -> Lavender (#9575CD) -> Deep purple (#5E35B1)
+      // Early: 255, 248, 225
+      // Late: 94, 53, 177
+      r = Math.round(255 - intensity * (255 - 94));
+      g = Math.round(248 - intensity * (248 - 53));
+      b = Math.round(225 - intensity * (225 - 177));
+    } else if (activeLens === "varsity") {
+      // Athletes gradient: Light cream (#F5F0E6) -> Turf Green (#2E6F40)
+      // Non-athlete: 245, 240, 230
+      // Athlete: 46, 111, 64
+      r = Math.round(245 - intensity * (245 - 46));
+      g = Math.round(240 - intensity * (240 - 111));
+      b = Math.round(230 - intensity * (230 - 64));
+    }
+
+    const strokeR = Math.max(r - 35, 40);
+    const strokeG = Math.max(g - 35, 10);
+    const strokeB = Math.max(b - 35, 10);
+
+    // Calculate perceived brightness (0-255)
+    const brightness = r * 0.299 + g * 0.587 + b * 0.114;
+    const textColor = brightness < 150 ? "white" : "var(--color-text-primary)";
 
     return {
       fill: `rgb(${r}, ${g}, ${b})`,
       stroke: `rgb(${strokeR}, ${strokeG}, ${strokeB})`,
+      textColor: textColor,
       transition: "fill 0.3s ease, stroke 0.3s ease",
     };
   };
@@ -166,10 +189,15 @@ function FloorPlan({
                   y={room.position.y + height / 2 + 4}
                   textAnchor="middle"
                   fontSize="10"
-                  fill="var(--color-text-primary)"
+                  fill={dynamicStyle.textColor || "var(--color-text-primary)"}
                   fontWeight="500"
                   pointerEvents="none"
-                  style={{ textShadow: "0 1px 2px rgba(255,255,255,0.3)" }}
+                  style={{
+                    textShadow:
+                      dynamicStyle.textColor === "white"
+                        ? "0 1px 2px rgba(0,0,0,0.5)"
+                        : "0 1px 2px rgba(255,255,255,0.3)",
+                  }}
                 >
                   {room.id}
                 </text>

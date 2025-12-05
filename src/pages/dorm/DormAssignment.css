@@ -154,8 +154,19 @@
   width: 100px;
   height: 20px;
   border-radius: 4px;
-  background: linear-gradient(to right, #f8f0dd, #48463e, #24231f);
   border: 1px solid var(--color-border);
+}
+
+.gradient-bar.social-gradient {
+  background: linear-gradient(to right, #f5f0e6, #e87461, #8c1515);
+}
+
+.gradient-bar.sleep-gradient {
+  background: linear-gradient(to right, #fff8e1, #9575cd, #5e35b1);
+}
+
+.gradient-bar.varsity-gradient {
+  background: linear-gradient(to right, #f5f0e6, #5d9f6c, #2e6f40);
 }
 
 .dorm-content {
