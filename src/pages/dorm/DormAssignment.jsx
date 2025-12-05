@@ -622,13 +622,13 @@ const createInitialZones = (floorId) => [
     label: "West Wing",
     stats: { social: "High", sleep: "Late", athletes: "1" },
     insights: [
+      "Main lounge located in this wing—social hub",
       "All night owls—perfect for late-night socializing",
-      "Jack & Luke (124) are the only athletes here",
       "High social energy—party planning types grouped",
     ],
     considerations: [
-      "Near lounge—expect late night hangouts",
-      "One athlete may feel isolated from teammates",
+      "⚠️ Joey & Steve in nearby North Hall wake at 5am",
+      "Lounge noise may disturb early risers in adjacent rooms",
       "Great fit for extroverts who stay up late",
     ],
     status: "pending",
@@ -646,16 +646,16 @@ const createInitialZones = (floorId) => [
   {
     id: `floor${floorId}-north-west`,
     label: "North Hall (West)",
-    stats: { social: "High", sleep: "Late", athletes: "0" },
+    stats: { social: "Mixed", sleep: "Mixed", athletes: "0" },
     insights: [
-      "Night owl corridor—all late sleepers",
-      "Shy students Olivia & Zoe in Room 103",
-      "Music production + DJing students grouped",
+      "⭐ Joey & Steve (Room 101)—early birds, up at 5am daily",
+      "⭐ Barack & Mitt (Room 102)—policy enthusiasts, late nights",
+      "⭐ Taylor & Sabrina (Room 103)—musicians, very late sleepers",
     ],
     considerations: [
-      "Room 103 introverts surrounded by extroverts",
-      "Consider swapping shy pair to North East",
-      "Far from lounge—good for focused socializing",
+      "⚠️ Room 101 early risers near lounge—may hear late night noise",
+      "Room 101 placed far from main entrance for quiet mornings",
+      "Consider: move Joey & Steve to quieter East section?",
     ],
     status: "pending",
     roomIds: [
@@ -869,6 +869,26 @@ function DormAssignment() {
   // Get contextual insights for a room based on location and neighbors
   const getRoomContext = (room) => {
     const insights = [];
+
+    // Special insights for featured students
+    if (room.id === 101) {
+      insights.push("⭐ Joey & Steve—early birds (5am wake up!)");
+      insights.push("⚠️ Adjacent to lounge—may hear late night noise");
+      insights.push("Consider: swap with Room 109 for quieter location?");
+      return insights;
+    }
+    if (room.id === 102) {
+      insights.push("⭐ Barack & Mitt—public policy enthusiasts");
+      insights.push("Night owls—compatible with neighbors");
+      insights.push("Good central location for campus involvement");
+      return insights;
+    }
+    if (room.id === 103) {
+      insights.push("⭐ Taylor & Sabrina—musicians & songwriters");
+      insights.push("Very late sleepers (2am-4am) —need quiet mornings");
+      insights.push("May want sound dampening for practice sessions");
+      return insights;
+    }
 
     // Location-based insights
     if (room.zone === "West Wing") {
