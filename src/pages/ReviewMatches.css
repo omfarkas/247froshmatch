@@ -2,10 +2,10 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #fff; /* Main bg is white, canvas will be gray */
+  background-color: var(--color-bg);
   overflow: hidden;
-  font-family: var(--font-main);
-  color: var(--text-color);
+  font-family: var(--font-primary);
+  color: var(--color-text-primary);
 }
 
 .review-matches-container.scissor-cursor {
@@ -20,7 +20,156 @@
 
 /* Sidebar Styles */
 .sidebar-area {
-  width: 450px; /* Increased to prevent cutoff of expand button */
+  width: 350px;
+  background-color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  transition: background-color 0.2s;
+}
+
+.sidebar-area.drag-over {
+  background-color: var(--color-surface-alt);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.sidebar-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.sidebar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.confirm-btn {
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+}
+
+.confirm-btn:hover {
+  background-color: var(--color-border);
+}
+
+.filter-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-icon);
+  transition: color 0.2s;
+}
+
+.filter-icon-btn:hover {
+  color: var(--color-accent);
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: visible; /* Allow expand button to show */
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding-bottom: 100px; /* Space for toolbar */
+  padding-right: 0.5rem; /* Extra space for expand button */
+}
+
+.sidebar-item {
+  /* Ensure items don't shrink */
+  flex-shrink: 0;
+  overflow: visible; /* Allow expand button to show outside bounds */
+}
+
+/* Canvas Styles */
+.canvas-section {
+  flex: 1;
+  background-color: var(--color-surface-alt);
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  position: relative;
+}
+
+.canvas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  z-index: 10; /* Ensure header is above draggable items if they overlap */
+}
+
+.canvas-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-surface);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  width: 300px;
+  gap: 0.5rem;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.search-bar input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  outline: none;
+  color: var(--color-text-primary);
+}
+
+.canvas-area {
+  flex: 1;
+  position: relative;
+  /* overflow: hidden;  Allow dragging outside? usually better to contain */
+}
+
+.review-matches-container.scissor-cursor {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>') 16 16, auto;
+}
+
+.split-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar Styles */
+.sidebar-area {
+  width: 350px; /* Reduced from 450px for neater look */
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -78,9 +227,10 @@
   overflow-x: visible; /* Allow expand button to show */
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem; /* Reduced gap */
   padding-bottom: 100px; /* Space for toolbar */
-  padding-right: 0.5rem; /* Extra space for expand button */
+  padding-right: 1.5rem; /* Increased space for hanging icons */
+  padding-left: 0.5rem; /* Add some left padding for balance */
 }
 
 .sidebar-item {
@@ -92,7 +242,7 @@
 /* Canvas Styles */
 .canvas-section {
   flex: 1;
-  background-color: #EAEAEA;
+  background-color: #FDFBF7; /* Cream color palette */
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
@@ -116,12 +266,12 @@
 .search-bar {
   display: flex;
   align-items: center;
-  background-color: #f0f0f0; /* Slightly lighter than canvas bg? or white? */
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: #fff; /* White background for better contrast on cream */
   padding: 0.5rem 1rem;
   border-radius: 24px;
   width: 300px;
   gap: 0.5rem;
+  border: 1px solid #eee; /* Subtle border */
 }
 
 .search-bar input {

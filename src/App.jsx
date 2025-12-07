@@ -7,6 +7,7 @@ import RoommateIndex from './pages/roommate/Index'
 import ReviewIndex from './pages/review/Index'
 import ReviewMatches from './pages/ReviewMatches'
 import DormIndex from './pages/dorm/Index'
+import MatchDetails from './pages/MatchDetails'
 
 function App() {
   return (
@@ -38,6 +39,14 @@ function App() {
               element={
                 <ProtectedRoute requiredStage={3}>
                   <DormIndex />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/match-details" 
+              element={
+                <ProtectedRoute requiredStage={2}>
+                  <MatchDetails />
                 </ProtectedRoute>
               } 
             />

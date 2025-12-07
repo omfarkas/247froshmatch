@@ -1,0 +1,111 @@
+.match-details-page {
+  padding: var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  font-family: var(--font-primary);
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xl);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  padding: 0;
+}
+
+.match-details-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.match-details-header h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.see-all-link {
+  color: var(--color-accent);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.profiles-comparison {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.profile-detail-card {
+  flex: 1;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.profile-header h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.profile-location {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.profile-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.profile-section h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.profile-text-box {
+  background-color: #f5f5f5; /* Light gray background for text blocks */
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+.notes-comparison {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.note-box {
+  flex: 1;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  min-height: 100px;
+  color: var(--color-text-secondary);
+}
+
+.note-placeholder {
+  font-style: italic;
+  color: #999;
+}

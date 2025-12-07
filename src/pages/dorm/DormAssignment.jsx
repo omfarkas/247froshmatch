@@ -21,7 +21,7 @@ const MOCK_FLOORS = [
         id: 101,
         zone: "North Hall",
         position: { x: 140, y: 20 },
-        students: [STUDENTS.joeyChestnut, STUDENTS.steveIrwin],
+        students: ["Joey Chestnut", "Mitt Romney"],
         preferences: {
           social: 4,
           quiet: 8,

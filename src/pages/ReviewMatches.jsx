@@ -12,189 +12,49 @@ const ReviewMatches = () => {
   const navigate = useNavigate();
   const { completeStage } = useStageContext();
 
-  // Mock data for matches - includes students from Stage 1 (Joey, Steve, Barack, Mitt, Taylor, Sabrina)
+  // Mock data for matches - only 3 pairs for demo
   const [matches, setMatches] = useState([
     {
       id: 1,
       type: "match",
       person1: "Joey C",
-      person2: "Steve I",
+      person2: "Barack O",
       x: 50,
       y: 50,
       gender: "male",
-      rating: 5,
-      notes:
-        "Both early birds! Up at 5am, love outdoors and nature. Joey plays Ultimate Frisbee.",
+      rating: 4,
+      person1Notes: "Early bird, loves outdoors and nature. Plays Ultimate Frisbee.",
+      person2Notes: "Interested in leadership and public service. Brings calm energy.",
       location: "sidebar",
+      hasWarning: true, 
     },
     {
       id: 2,
       type: "match",
-      person1: "Barack O",
-      person2: "Mitt R",
-      x: 50,
-      y: 50,
-      gender: "male",
-      rating: 4,
-      notes:
-        "Both interested in public policy and leadership. Different perspectives but respectful.",
-      location: "sidebar",
-    },
-    {
-      id: 3,
-      type: "match",
-      person1: "Taylor S",
-      person2: "Sabrina C",
+      person1: "Sabrina C",
+      person2: "Taylor S",
       x: 50,
       y: 250,
       gender: "female",
       rating: 5,
-      notes: "Both musicians and night owls! Love songwriting and performing.",
+      person1Notes: "Musician and night owl. Loves songwriting.",
+      person2Notes: "Musician and performer. Loves performing.",
       location: "sidebar",
+      hasWarning: false,
     },
     {
-      id: 4,
+      id: 3,
       type: "match",
-      person1: "Emma C",
-      person2: "Sofia R",
-      x: 350,
-      y: 50,
-      gender: "female",
-      rating: 4,
-      notes: "Photography enthusiasts, similar sleep schedules",
-      location: "canvas",
-    },
-    {
-      id: 5,
-      type: "match",
-      person1: "Marcus J",
-      person2: "Aiden P",
-      x: 650,
-      y: 50,
-      gender: "male",
-      rating: 3,
-      notes: "Gaming and music lovers, very late sleepers",
-      location: "canvas",
-    },
-    {
-      id: 6,
-      type: "match",
-      person1: "Olivia M",
-      person2: "Zoe K",
+      person1: "Mitt R",
+      person2: "Steve I",
       x: 50,
       y: 450,
-      gender: "female",
-      rating: 5,
-      notes: "Quiet, artistic types. Both love reading.",
+      gender: "male",
+      rating: 4,
+      person1Notes: "Enjoys outdoors and business. More formal.",
+      person2Notes: "Adventurous and enjoys business. More casual.",
       location: "sidebar",
-    },
-    {
-      id: 7,
-      type: "match",
-      person1: "Liam O",
-      person2: "Noah W",
-      x: 50,
-      y: 220,
-      gender: "male",
-      rating: 4,
-      notes: "Film buffs, podcast enthusiasts",
-      location: "canvas",
-    },
-    {
-      id: 8,
-      type: "match",
-      person1: "Ava T",
-      person2: "Mia D",
-      x: 350,
-      y: 220,
-      gender: "female",
-      rating: 5,
-      notes: "Dance and creative writing, night owls",
-      location: "canvas",
-    },
-    {
-      id: 9,
-      type: "match",
-      person1: "Ethan G",
-      person2: "Lucas A",
-      x: 50,
-      y: 50,
-      gender: "male",
-      rating: 4,
-      notes: "Robotics and coding enthusiasts",
-      location: "sidebar",
-    },
-    {
-      id: 10,
-      type: "match",
-      person1: "Isabella L",
-      person2: "Charlotte B",
-      x: 650,
-      y: 220,
-      gender: "female",
-      rating: 4,
-      notes: "Piano players, science majors",
-      location: "canvas",
-    },
-    {
-      id: 11,
-      type: "match",
-      person1: "James W",
-      person2: "Benjamin T",
-      x: 50,
-      y: 50,
-      gender: "male",
-      rating: 5,
-      notes: "Theater and improv, very social",
-      location: "sidebar",
-    },
-    {
-      id: 12,
-      type: "match",
-      person1: "Amelia M",
-      person2: "Harper J",
-      x: 50,
-      y: 390,
-      gender: "female",
-      rating: 4,
-      notes: "Early risers, yoga and meditation",
-      location: "canvas",
-    },
-    {
-      id: 13,
-      type: "match",
-      person1: "Daniel M",
-      person2: "Matthew W",
-      x: 50,
-      y: 50,
-      gender: "male",
-      rating: 3,
-      notes: "Gamers and esports fans",
-      location: "sidebar",
-    },
-    {
-      id: 14,
-      type: "match",
-      person1: "Elijah W",
-      person2: "Sebastian T",
-      x: 350,
-      y: 390,
-      gender: "male",
-      rating: 4,
-      notes: "Music production, DJing",
-      location: "canvas",
-    },
-    {
-      id: 15,
-      type: "match",
-      person1: "Nora P",
-      person2: "Hazel G",
-      x: 650,
-      y: 390,
-      gender: "female",
-      rating: 4,
-      notes: "True crime fans, coffee lovers",
-      location: "canvas",
+      hasWarning: true, 
     },
   ]);
 
@@ -354,9 +214,88 @@ const ReviewMatches = () => {
       return;
     }
 
-    let updatedMatches = matches.map((m) => (m.id === id ? draggedMatch : m));
+    // Check for merging with other matches (Pair + Pair = Quad)
+    const PROXIMITY_THRESHOLD = 150;
+    const nearbyMatches = matches.filter((m) => {
+      if (m.id === id) return false;
+      const distance = Math.sqrt(
+        Math.pow(m.x - data.x, 2) + Math.pow(m.y - data.y, 2)
+      );
+      return distance < PROXIMITY_THRESHOLD;
+    });
 
-    updatedMatches = nudgeAwayFromCollisions(draggedMatch, updatedMatches);
+    if (nearbyMatches.length > 0) {
+      const targetMatch = nearbyMatches[0];
+      console.log("Merging match", draggedMatch, "into", targetMatch);
+
+      // Create a new merged match (Quad)
+      // Note: This assumes we want to support quads. If the UI only supports triples, we might need to adjust.
+      // For now, let's assume we can add person3 and person4, or just combine names.
+      // Since the UI seems to support person3, let's try to fit them in.
+      // If target has 2 people and dragged has 2 people -> 4 people.
+      
+      // Let's create a new match with all people
+      const mergedMatch = {
+        ...targetMatch,
+        person3: draggedMatch.person1,
+        person4: draggedMatch.person2, // We'll need to update MatchCard to display person4
+        notes: `${targetMatch.notes} + ${draggedMatch.notes}`,
+        rating: Math.round((targetMatch.rating + draggedMatch.rating) / 2),
+      };
+
+      // Remove the dragged match and update the target match
+      setMatches(matches.filter(m => m.id !== id).map(m => m.id === targetMatch.id ? mergedMatch : m));
+      return;
+    }
+
+    // Snap to grid on canvas with collision avoidance
+    const GRID_SIZE = 150; // Grid spacing
+    let snappedX = Math.round(data.x / GRID_SIZE) * GRID_SIZE;
+    let snappedY = Math.round(data.y / GRID_SIZE) * GRID_SIZE;
+    
+    // Find nearest empty slot if current one is occupied
+    const isOccupied = (x, y) => {
+      return matches.some(m => 
+        m.id !== id && 
+        m.location !== "sidebar" && 
+        Math.abs(m.x - x) < 50 && 
+        Math.abs(m.y - y) < 50
+      );
+    };
+
+    if (isOccupied(snappedX, snappedY)) {
+      // Spiral search for nearest empty slot
+      let found = false;
+      let radius = 1;
+      while (!found && radius < 5) { // Limit search radius
+        const directions = [
+          [0, -1], [1, -1], [1, 0], [1, 1], 
+          [0, 1], [-1, 1], [-1, 0], [-1, -1]
+        ];
+        
+        for (const [dx, dy] of directions) {
+          const testX = snappedX + (dx * radius * GRID_SIZE);
+          const testY = snappedY + (dy * radius * GRID_SIZE);
+          
+          if (!isOccupied(testX, testY) && testX >= 0 && testY >= 0) {
+            snappedX = testX;
+            snappedY = testY;
+            found = true;
+            break;
+          }
+        }
+        radius++;
+      }
+    }
+    
+    const snappedMatch = {
+      ...draggedMatch,
+      x: snappedX,
+      y: snappedY,
+      location: "canvas", // Ensure location is updated to canvas
+    };
+
+    const updatedMatches = matches.map((m) => (m.id === id ? snappedMatch : m));
     setMatches(updatedMatches);
   };
 
@@ -507,11 +446,24 @@ const ReviewMatches = () => {
         profilesToCombine.length;
 
       // Create a new match from the profiles
+      const person1 = profilesToCombine[0].name;
+      const person2 = profilesToCombine[1].name;
+      
+      // Check if this pair should have a warning
+      const warningPairs = [
+        ["Joey C", "Steve I"],
+        ["Barack O", "Mitt R"]
+      ];
+      
+      const hasWarning = warningPairs.some(pair => 
+        (pair.includes(person1) && pair.includes(person2))
+      );
+
       const newMatch = {
         id: `match-${Date.now()}`,
         type: "match",
-        person1: profilesToCombine[0].name,
-        person2: profilesToCombine[1].name,
+        person1: person1,
+        person2: person2,
         person3: profilesToCombine[2]?.name, // Optional third person
         x: avgX,
         y: avgY,
@@ -519,6 +471,7 @@ const ReviewMatches = () => {
         rating: 3,
         notes: "Manually combined group",
         location: "canvas", // New matches go to canvas
+        hasWarning: hasWarning, // Preserve warning if it's a warning pair
       };
 
       console.log("Created match:", newMatch);
@@ -617,36 +570,40 @@ const ReviewMatches = () => {
       }
 
       // Ensure coordinates are valid numbers
-      const startX = typeof matchToSplit.x === "number" ? matchToSplit.x : 0;
-      const startY = typeof matchToSplit.y === "number" ? matchToSplit.y : 0;
+      const isSidebarMatch = matchToSplit.location === "sidebar";
+      const startX = isSidebarMatch ? 0 : (typeof matchToSplit.x === "number" ? matchToSplit.x : 0);
+      const startY = isSidebarMatch ? 0 : (typeof matchToSplit.y === "number" ? matchToSplit.y : 0);
 
-      // Create two individual profiles from the match
-      const profile1 = {
-        id: `profile-${nextProfileId}`,
-        type: "profile",
-        name: matchToSplit.person1 || "Unknown",
-        x: startX - 80, // Offset to the left
-        y: startY,
-        gender: matchToSplit.gender,
-        location: matchToSplit.location || "canvas",
-      };
+      // Create individual profiles for each person in the match
+      const people = [
+        matchToSplit.person1,
+        matchToSplit.person2,
+        matchToSplit.person3,
+        matchToSplit.person4
+      ].filter(Boolean); // Filter out undefined/null
 
-      const profile2 = {
-        id: `profile-${nextProfileId + 1}`,
-        type: "profile",
-        name: matchToSplit.person2 || "Unknown",
-        x: startX + 80, // Offset to the right
-        y: startY,
-        gender: matchToSplit.gender,
-        location: matchToSplit.location || "canvas",
-      };
+      const newProfiles = people.map((personName, index) => {
+        // Calculate offset based on index to spread them out
+        // e.g. -120, -40, 40, 120
+        const offset = (index - (people.length - 1) / 2) * 100;
+        
+        return {
+          id: `profile-${nextProfileId + index}`,
+          type: "profile",
+          name: personName,
+          x: isSidebarMatch ? 0 : startX + offset,
+          y: startY,
+          gender: matchToSplit.gender,
+          location: matchToSplit.location || "canvas",
+        };
+      });
 
-      console.log("Creating profiles:", profile1, profile2);
+      console.log("Creating profiles:", newProfiles);
 
-      // Remove the match and add the two profiles
+      // Remove the match and add the new profiles
       setMatches(matches.filter((m) => m.id !== matchId));
-      setProfiles([...profiles, profile1, profile2]);
-      setNextProfileId(nextProfileId + 2);
+      setProfiles([...profiles, ...newProfiles]);
+      setNextProfileId(nextProfileId + people.length);
 
       console.log("Split complete");
     }
@@ -724,15 +681,9 @@ const ReviewMatches = () => {
         <div className="sidebar-area">
           <div className="sidebar-header">
             <h2>Matches</h2>
-            <div className="sidebar-actions">
-              <button className="confirm-btn" onClick={handleConfirm}>
-                confirm{" "}
-                {selectedMatches.length > 0 && `(${selectedMatches.length})`}
-              </button>
-              <button className="filter-icon-btn">
-                <SlidersHorizontal size={20} />
-              </button>
-            </div>
+            <button className="filter-icon-btn">
+              <SlidersHorizontal size={20} />
+            </button>
           </div>
           <div className="sidebar-content">
             {sidebarMatches.map((match) => (
@@ -740,14 +691,15 @@ const ReviewMatches = () => {
                 <MatchCard
                   match={match}
                   defaultPosition={{ x: 0, y: 0 }}
-                  onDrag={() => {}} // Disable drag in sidebar for now
-                  onStop={() => {}}
-                  onClick={() => {}}
-                  isScissorMode={false}
-                  isStatic={true}
+                  onDrag={handleMatchDrag}
+                  onStop={handleMatchStop}
+                  onClick={() => handleMatchSplit(match.id)}
+                  isScissorMode={scissorMode}
+                  isStatic={false}
                   isSelected={selectedMatches.includes(match.id)}
                   onToggleSelect={toggleMatchSelection}
                   isHighlighted={recommendedMatchIds.includes(match.id)}
+                  className="sidebar-card"
                 />
               </div>
             ))}
@@ -792,6 +744,7 @@ const ReviewMatches = () => {
                 onClick={() => handleMatchSplit(match.id)}
                 isScissorMode={scissorMode}
                 isHighlighted={recommendedMatchIds.includes(match.id)}
+                className="canvas-card"
               />
             ))}
             {canvasProfiles.map((profile) => (

@@ -2,6 +2,28 @@
   position: absolute;
   cursor: grab;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-card-container.expanded {
+  z-index: 50;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  width: 200px; /* Wider when expanded */
+}
+
+.profile-card-container.expanded .profile-card {
+  box-shadow: none;
+  border: none;
+  width: 100%;
+  padding: 0;
+  min-height: auto;
+  background: transparent;
 }
 
 .profile-card-container:active {
@@ -9,27 +31,121 @@
 }
 
 .profile-card {
-  background-color: #e0e0e0;
-  border-radius: 16px;
-  padding: 1rem 1.5rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  min-width: 120px;
-  height: 120px; /* Fixed height to match MatchCard */
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-sm);
+  width: 120px; /* Half of MatchCard width (240px) */
+  min-height: 80px; /* Match MatchCard header height */
+  transition: all 0.2s ease;
+  position: relative; /* For expand button positioning */
 }
 
 .profile-card:hover {
+  border-color: var(--color-text-secondary);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-.profile-name {
+/* Reuse person-name-large style from MatchCard or define here if not global */
+.person-name-large {
+  font-family: var(--font-primary);
   font-size: 1rem;
+  font-weight: 600;
   text-align: center;
-  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* Expand Button - Reused style but adjusted for ProfileCard */
+.profile-card .expand-btn {
+  background-color: var(--color-text-secondary);
+  border-radius: 50%;
+  width: 24px; /* Slightly smaller */
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  z-index: 1;
+  color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.profile-card .expand-btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s;
+}
+
+.profile-card .expand-btn svg.rotated {
+  transform: rotate(180deg);
+}
+
+/* Details Section */
+.match-card-details {
+  margin-top: var(--spacing-sm);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.notes-box {
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.note-item {
+  margin-bottom: 0.5rem;
+}
+
+.note-item:last-child {
+  margin-bottom: 0;
+}
+
+.notes-label {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.rating-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.details-btn {
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  padding: 0.5rem 1.2rem;
+  border-radius: 100px; /* Pill shape */
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.details-btn:hover {
+  background-color: var(--color-border);
+  transform: translateY(-1px);
 }

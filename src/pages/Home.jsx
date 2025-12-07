@@ -1,5 +1,7 @@
 import DashboardCard from "../components/DashboardCard";
 import { useStageContext } from "../contexts/StageContext";
+import houseIcon from '../assets/house_icon.png';
+import figureIcon from '../assets/figure_icon.png';
 
 // Icons matching the wireframe
 const RoommateIcon = () => (
@@ -89,14 +91,15 @@ const ReviewIcon = () => (
 );
 
 const DormIcon = () => (
-  <svg viewBox="0 0 180 120" fill="currentColor">
-    {/* Empty/minimal - dorm matching shows less visual in wireframe */}
-  </svg>
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', height: '100%' }}>
+    <img src={houseIcon} alt="Dorm" style={{ height: '80px', width: 'auto', objectFit: 'contain' }} />
+    <img src={figureIcon} alt="Person" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
+  </div>
 );
 
 // Demo data - these numbers match the wireframe
 const DEMO_DATA = {
-  roommate: { current: 900, total: 1800 },
+  roommate: { current: 150, total: 300 },
   review: { current: 200, total: 900 },
   dorm: { current: 120, total: 200 },
 };
