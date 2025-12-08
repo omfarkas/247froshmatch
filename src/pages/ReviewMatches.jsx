@@ -23,10 +23,18 @@ const ReviewMatches = () => {
       y: 50,
       gender: "male",
       rating: 4,
-      person1Notes: "Early bird, loves outdoors and nature. Plays Ultimate Frisbee.",
-      person2Notes: "Interested in leadership and public service. Brings calm energy.",
+      person1Notes:
+        "Early bird, loves outdoors and nature. Plays Ultimate Frisbee.",
+      person1Sleep: "early",
+      person1Social: 7,
+      person1Athlete: true,
+      person2Notes:
+        "Interested in leadership and public service. Brings calm energy.",
+      person2Sleep: "early",
+      person2Social: 8,
+      person2Athlete: false,
       location: "sidebar",
-      hasWarning: true, 
+      hasWarning: true,
     },
     {
       id: 2,
@@ -38,7 +46,13 @@ const ReviewMatches = () => {
       gender: "female",
       rating: 5,
       person1Notes: "Musician and night owl. Loves songwriting.",
+      person1Sleep: "late",
+      person1Social: 6,
+      person1Athlete: false,
       person2Notes: "Musician and performer. Loves performing.",
+      person2Sleep: "late",
+      person2Social: 9,
+      person2Athlete: false,
       location: "sidebar",
       hasWarning: false,
     },
@@ -52,9 +66,15 @@ const ReviewMatches = () => {
       gender: "male",
       rating: 4,
       person1Notes: "Enjoys outdoors and business. More formal.",
+      person1Sleep: "early",
+      person1Social: 5,
+      person1Athlete: false,
       person2Notes: "Adventurous and enjoys business. More casual.",
+      person2Sleep: "late",
+      person2Social: 8,
+      person2Athlete: false,
       location: "sidebar",
-      hasWarning: true, 
+      hasWarning: true,
     },
   ]);
 
@@ -233,7 +253,7 @@ const ReviewMatches = () => {
       // For now, let's assume we can add person3 and person4, or just combine names.
       // Since the UI seems to support person3, let's try to fit them in.
       // If target has 2 people and dragged has 2 people -> 4 people.
-      
+
       // Let's create a new match with all people
       const mergedMatch = {
         ...targetMatch,
@@ -244,7 +264,11 @@ const ReviewMatches = () => {
       };
 
       // Remove the dragged match and update the target match
-      setMatches(matches.filter(m => m.id !== id).map(m => m.id === targetMatch.id ? mergedMatch : m));
+      setMatches(
+        matches
+          .filter((m) => m.id !== id)
+          .map((m) => (m.id === targetMatch.id ? mergedMatch : m))
+      );
       return;
     }
 
@@ -252,14 +276,15 @@ const ReviewMatches = () => {
     const GRID_SIZE = 150; // Grid spacing
     let snappedX = Math.round(data.x / GRID_SIZE) * GRID_SIZE;
     let snappedY = Math.round(data.y / GRID_SIZE) * GRID_SIZE;
-    
+
     // Find nearest empty slot if current one is occupied
     const isOccupied = (x, y) => {
-      return matches.some(m => 
-        m.id !== id && 
-        m.location !== "sidebar" && 
-        Math.abs(m.x - x) < 50 && 
-        Math.abs(m.y - y) < 50
+      return matches.some(
+        (m) =>
+          m.id !== id &&
+          m.location !== "sidebar" &&
+          Math.abs(m.x - x) < 50 &&
+          Math.abs(m.y - y) < 50
       );
     };
 
@@ -267,16 +292,23 @@ const ReviewMatches = () => {
       // Spiral search for nearest empty slot
       let found = false;
       let radius = 1;
-      while (!found && radius < 5) { // Limit search radius
+      while (!found && radius < 5) {
+        // Limit search radius
         const directions = [
-          [0, -1], [1, -1], [1, 0], [1, 1], 
-          [0, 1], [-1, 1], [-1, 0], [-1, -1]
+          [0, -1],
+          [1, -1],
+          [1, 0],
+          [1, 1],
+          [0, 1],
+          [-1, 1],
+          [-1, 0],
+          [-1, -1],
         ];
-        
+
         for (const [dx, dy] of directions) {
-          const testX = snappedX + (dx * radius * GRID_SIZE);
-          const testY = snappedY + (dy * radius * GRID_SIZE);
-          
+          const testX = snappedX + dx * radius * GRID_SIZE;
+          const testY = snappedY + dy * radius * GRID_SIZE;
+
           if (!isOccupied(testX, testY) && testX >= 0 && testY >= 0) {
             snappedX = testX;
             snappedY = testY;
@@ -287,7 +319,7 @@ const ReviewMatches = () => {
         radius++;
       }
     }
-    
+
     const snappedMatch = {
       ...draggedMatch,
       x: snappedX,
@@ -318,7 +350,7 @@ const ReviewMatches = () => {
     // Check if profile was dropped in the sidebar area
     // Simplified check: if x is negative, it's to the left of the canvas (sidebar)
     const isSidebarDrop = data.x < 0;
-    
+
     // If dropped in sidebar area, check if it's over a match card
     if (isSidebarDrop) {
       // Get all sidebar match elements and check if profile was dropped on one
@@ -380,7 +412,7 @@ const ReviewMatches = () => {
     let updatedProfiles = profiles.map((p) =>
       p.id === id ? draggedProfile : p
     );
-    
+
     // CHECK FOR COMBINING FIRST (before collision detection)
     const nearbyProfiles = updatedProfiles.filter((p) => {
       if (p.id === id) return false;
@@ -446,15 +478,15 @@ const ReviewMatches = () => {
       // Create a new match from the profiles
       const person1 = profilesToCombine[0].name;
       const person2 = profilesToCombine[1].name;
-      
+
       // Check if this pair should have a warning
       const warningPairs = [
         ["Joey C", "Steve I"],
-        ["Barack O", "Mitt R"]
+        ["Barack O", "Mitt R"],
       ];
-      
-      const hasWarning = warningPairs.some(pair => 
-        (pair.includes(person1) && pair.includes(person2))
+
+      const hasWarning = warningPairs.some(
+        (pair) => pair.includes(person1) && pair.includes(person2)
       );
 
       const newMatch = {
@@ -555,10 +587,7 @@ const ReviewMatches = () => {
   };
 
   const handleMatchSplit = (matchId) => {
-    console.log(
-      "handleMatchSplit called for:",
-      matchId
-    );
+    console.log("handleMatchSplit called for:", matchId);
     // No scissor mode check needed anymore
     const matchToSplit = matches.find((m) => m.id === matchId);
     console.log("Match to split:", matchToSplit);
@@ -570,22 +599,30 @@ const ReviewMatches = () => {
 
     // Ensure coordinates are valid numbers
     const isSidebarMatch = matchToSplit.location === "sidebar";
-    const startX = isSidebarMatch ? 0 : (typeof matchToSplit.x === "number" ? matchToSplit.x : 0);
-    const startY = isSidebarMatch ? 0 : (typeof matchToSplit.y === "number" ? matchToSplit.y : 0);
+    const startX = isSidebarMatch
+      ? 0
+      : typeof matchToSplit.x === "number"
+      ? matchToSplit.x
+      : 0;
+    const startY = isSidebarMatch
+      ? 0
+      : typeof matchToSplit.y === "number"
+      ? matchToSplit.y
+      : 0;
 
     // Create individual profiles for each person in the match
     const people = [
       matchToSplit.person1,
       matchToSplit.person2,
       matchToSplit.person3,
-      matchToSplit.person4
+      matchToSplit.person4,
     ].filter(Boolean); // Filter out undefined/null
 
     const newProfiles = people.map((personName, index) => {
       // Calculate offset based on index to spread them out
       // e.g. -120, -40, 40, 120
       const offset = (index - (people.length - 1) / 2) * 100;
-      
+
       return {
         id: `profile-${nextProfileId + index}`,
         type: "profile",
@@ -594,7 +631,7 @@ const ReviewMatches = () => {
         y: startY,
         gender: matchToSplit.gender,
         location: matchToSplit.location || "canvas",
-        notes: matchToSplit[`person${index + 1}Notes`] // Preserve notes
+        notes: matchToSplit[`person${index + 1}Notes`], // Preserve notes
       };
     });
 
@@ -658,20 +695,28 @@ const ReviewMatches = () => {
         <Link to="/" className="back-link">
           ← Back to Dashboard
         </Link>
-        
+
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           {/* Gender Filter Tool moved to header */}
           <div className="gender-filter-tool">
             <button
-              className={`gender-btn ${genderFilter === "male" ? "active" : ""}`}
-              onClick={() => setGenderFilter(genderFilter === "male" ? "all" : "male")}
+              className={`gender-btn ${
+                genderFilter === "male" ? "active" : ""
+              }`}
+              onClick={() =>
+                setGenderFilter(genderFilter === "male" ? "all" : "male")
+              }
               title="Filter Male"
             >
               ♂
             </button>
             <button
-              className={`gender-btn ${genderFilter === "female" ? "active" : ""}`}
-              onClick={() => setGenderFilter(genderFilter === "female" ? "all" : "female")}
+              className={`gender-btn ${
+                genderFilter === "female" ? "active" : ""
+              }`}
+              onClick={() =>
+                setGenderFilter(genderFilter === "female" ? "all" : "female")
+              }
               title="Filter Female"
             >
               ♀
@@ -786,7 +831,7 @@ const ReviewMatches = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Toolbar removed */}
     </div>
   );

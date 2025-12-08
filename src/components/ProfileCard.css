@@ -7,6 +7,12 @@
   align-items: center;
 }
 
+/* When being dragged, bring to front of everything */
+.profile-card-container.react-draggable-dragging {
+  z-index: 10000 !important;
+  pointer-events: auto;
+}
+
 .profile-card-container.expanded {
   z-index: 50;
   background-color: var(--color-surface);
