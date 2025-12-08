@@ -99,7 +99,16 @@ function IssuePanel({
       <div className="issue-panel empty">
         <div className="empty-state">
           <div className="empty-icon">🏠</div>
-          <p>Select a room to view details</p>
+          <div className="help-section">
+            <div className="help-item">
+              <span className="help-number">1</span>
+              <p>Click rooms to view details and initiate swaps</p>
+            </div>
+            <div className="help-item">
+              <span className="help-number">2</span>
+              <p>Review sections and approve</p>
+            </div>
+          </div>
         </div>
       </div>
     );
