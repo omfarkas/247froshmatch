@@ -1,10 +1,22 @@
-import React, { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Draggable from 'react-draggable';
-import { User, ChevronDown, Star, AlertCircle } from 'lucide-react';
-import './MatchCard.css';
+import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Draggable from "react-draggable";
+import { User, ChevronDown, Star, AlertCircle } from "lucide-react";
+import "./MatchCard.css";
 
-const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorMode, isStatic, isSelected, onToggleSelect, isHighlighted, className }) => {
+const MatchCard = ({
+  match,
+  defaultPosition,
+  onDrag,
+  onStop,
+  onClick,
+  isScissorMode,
+  isStatic,
+  isSelected,
+  onToggleSelect,
+  isHighlighted,
+  className,
+}) => {
   const nodeRef = useRef(null);
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -17,7 +29,7 @@ const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorM
   };
 
   // Only show tooltips on canvas (workspace), not sidebar
-  const isInWorkspace = className?.includes('canvas-card');
+  const isInWorkspace = className?.includes("canvas-card");
 
   // Student info tooltip component - matching IssuePanel style with stats
   const StudentTooltip = ({ name, notes, sleep, social, athlete }) => (
@@ -26,15 +38,15 @@ const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorM
       <div className="tooltip-stats">
         <div className="tooltip-stat">
           <span className="stat-label">Social</span>
-          <span className="stat-value">{social || '—'}/10</span>
+          <span className="stat-value">{social || "—"}/10</span>
         </div>
         <div className="tooltip-stat">
           <span className="stat-label">Sleep</span>
-          <span className="stat-value">{sleep || '—'}</span>
+          <span className="stat-value">{sleep || "—"}</span>
         </div>
         <div className="tooltip-stat">
           <span className="stat-label">Athlete</span>
-          <span className="stat-value">{athlete ? 'Yes' : 'No'}</span>
+          <span className="stat-value">{athlete ? "Yes" : "No"}</span>
         </div>
       </div>
       {notes && <div className="tooltip-notes">{notes}</div>}
@@ -43,7 +55,7 @@ const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorM
 
   const handleDividerClick = (e) => {
     e.stopPropagation();
-    console.log('Divider clicked, triggering split for match:', match.id);
+    console.log("Divider clicked, triggering split for match:", match.id);
     if (onClick) onClick(); // Trigger the split action
   };
 
@@ -57,9 +69,22 @@ const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorM
   const cardContent = (
     <div
       ref={isStatic ? null : nodeRef}
-      className={`match-card-container ${isStatic ? 'static' : ''} ${isScissorMode ? 'scissor-target' : ''} ${isExpanded ? 'expanded' : ''} ${isSelected ? 'selected' : ''} ${isHighlighted ? 'highlighted' : ''} ${className || ''}`}
+      className={`match-card-container ${isStatic ? "static" : ""} ${
+        isScissorMode ? "scissor-target" : ""
+      } ${isExpanded ? "expanded" : ""} ${isSelected ? "selected" : ""} ${
+        isHighlighted ? "highlighted" : ""
+      } ${className || ""}`}
       onContextMenu={handleContextMenu}
-      style={isStatic ? { position: 'relative', left: 'auto', top: 'auto', transform: 'none' } : {}}
+      style={
+        isStatic
+          ? {
+              position: "relative",
+              left: "auto",
+              top: "auto",
+              transform: "none",
+            }
+          : {}
+      }
     >
       {/* Warning icon badge in top right corner */}
       {match.hasWarning && (
@@ -67,18 +92,18 @@ const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorM
           <AlertCircle size={30} color="#E53935" strokeWidth={2.5} />
         </div>
       )}
-      
+
       <div className="match-card-main">
         <div className="match-card-header">
-          <div 
+          <div
             className="match-person"
-            onMouseEnter={() => isInWorkspace && setHoveredPerson('person1')}
+            onMouseEnter={() => isInWorkspace && setHoveredPerson("person1")}
             onMouseLeave={() => setHoveredPerson(null)}
           >
             <span className="person-name-large">{match.person1}</span>
-            {isInWorkspace && hoveredPerson === 'person1' && (
-              <StudentTooltip 
-                name={match.person1} 
+            {isInWorkspace && hoveredPerson === "person1" && (
+              <StudentTooltip
+                name={match.person1}
                 notes={match.person1Notes}
                 sleep={match.person1Sleep}
                 social={match.person1Social}
@@ -87,20 +112,17 @@ const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorM
             )}
           </div>
 
-          <div
-            className="divider"
-            onClick={handleDividerClick}
-          />
+          <div className="divider" onClick={handleDividerClick} />
 
-          <div 
+          <div
             className="match-person"
-            onMouseEnter={() => isInWorkspace && setHoveredPerson('person2')}
+            onMouseEnter={() => isInWorkspace && setHoveredPerson("person2")}
             onMouseLeave={() => setHoveredPerson(null)}
           >
             <span className="person-name-large">{match.person2}</span>
-            {isInWorkspace && hoveredPerson === 'person2' && (
-              <StudentTooltip 
-                name={match.person2} 
+            {isInWorkspace && hoveredPerson === "person2" && (
+              <StudentTooltip
+                name={match.person2}
                 notes={match.person2Notes}
                 sleep={match.person2Sleep}
                 social={match.person2Social}
@@ -108,56 +130,6 @@ const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorM
               />
             )}
           </div>
-
-          {match.person3 && (
-            <>
-              <div
-                className={`divider ${isScissorMode ? 'scissor-active' : ''}`}
-                onClick={handleDividerClick}
-              />
-              <div 
-                className="match-person"
-                onMouseEnter={() => isInWorkspace && setHoveredPerson('person3')}
-                onMouseLeave={() => setHoveredPerson(null)}
-              >
-                <span className="person-name-large">{match.person3}</span>
-                {isInWorkspace && hoveredPerson === 'person3' && (
-                  <StudentTooltip 
-                    name={match.person3} 
-                    notes={match.person3Notes}
-                    sleep={match.person3Sleep}
-                    social={match.person3Social}
-                    athlete={match.person3Athlete}
-                  />
-                )}
-              </div>
-            </>
-          )}
-
-          {match.person4 && (
-            <>
-              <div
-                className={`divider ${isScissorMode ? 'scissor-active' : ''}`}
-                onClick={handleDividerClick}
-              />
-              <div 
-                className="match-person"
-                onMouseEnter={() => isInWorkspace && setHoveredPerson('person4')}
-                onMouseLeave={() => setHoveredPerson(null)}
-              >
-                <span className="person-name-large">{match.person4}</span>
-                {isInWorkspace && hoveredPerson === 'person4' && (
-                  <StudentTooltip 
-                    name={match.person4} 
-                    notes={match.person4Notes}
-                    sleep={match.person4Sleep}
-                    social={match.person4Social}
-                    athlete={match.person4Athlete}
-                  />
-                )}
-              </div>
-            </>
-          )}
         </div>
 
         {!isExpanded && !isScissorMode && (
@@ -184,26 +156,14 @@ const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorM
               <span className="notes-label">{match.person2}: </span>
               {match.person2Notes || "No notes"}
             </div>
-            {match.person3 && (
-              <div className="note-item">
-                <span className="notes-label">{match.person3}: </span>
-                {match.person3Notes || "No notes"}
-              </div>
-            )}
-            {match.person4 && (
-              <div className="note-item">
-                <span className="notes-label">{match.person4}: </span>
-                {match.person4Notes || "No notes"}
-              </div>
-            )}
           </div>
 
           <div className="rating-row">
-            <button 
+            <button
               className="details-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate('/match-details', { state: { match } });
+                navigate("/match-details", { state: { match } });
               }}
             >
               details

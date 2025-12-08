@@ -132,11 +132,9 @@ const ReviewMatches = () => {
     const draggedProfile = profiles.find((p) => p.id === profileId);
     if (!draggedProfile) return [];
 
-    // Filter matches by same gender and not already a triple
+    // Filter matches by same gender (all matches are pairs now)
     return matches
-      .filter(
-        (match) => match.gender === draggedProfile.gender && !match.person3 // Only pairs, not triples
-      )
+      .filter((match) => match.gender === draggedProfile.gender)
       .sort((a, b) => b.rating - a.rating) // Sort by rating, highest first
       .slice(0, 3) // Top 3 recommendations
       .map((m) => m.id);
@@ -237,44 +235,20 @@ const ReviewMatches = () => {
     }
 
     // Check for merging with other matches (Pair + Pair = Quad)
-    const PROXIMITY_THRESHOLD = 150;
-    const nearbyMatches = matches.filter((m) => {
-      if (m.id === id) return false;
-      const distance = Math.sqrt(
-        Math.pow(m.x - data.x, 2) + Math.pow(m.y - data.y, 2)
+    // Only merge if cards actually overlap (bounding box intersection)
+    const CARD_WIDTH = 240;
+    const CARD_HEIGHT = 100;
+
+    const checkOverlap = (card1X, card1Y, card2X, card2Y) => {
+      return (
+        card1X < card2X + CARD_WIDTH &&
+        card1X + CARD_WIDTH > card2X &&
+        card1Y < card2Y + CARD_HEIGHT &&
+        card1Y + CARD_HEIGHT > card2Y
       );
-      return distance < PROXIMITY_THRESHOLD;
-    });
+    };
 
-    if (nearbyMatches.length > 0) {
-      const targetMatch = nearbyMatches[0];
-      console.log("Merging match", draggedMatch, "into", targetMatch);
-
-      // Create a new merged match (Quad)
-      // Note: This assumes we want to support quads. If the UI only supports triples, we might need to adjust.
-      // For now, let's assume we can add person3 and person4, or just combine names.
-      // Since the UI seems to support person3, let's try to fit them in.
-      // If target has 2 people and dragged has 2 people -> 4 people.
-
-      // Let's create a new match with all people
-      const mergedMatch = {
-        ...targetMatch,
-        person3: draggedMatch.person1,
-        person4: draggedMatch.person2, // We'll need to update MatchCard to display person4
-        notes: `${targetMatch.notes} + ${draggedMatch.notes}`,
-        rating: Math.round((targetMatch.rating + draggedMatch.rating) / 2),
-      };
-
-      // Remove the dragged match and update the target match
-      setMatches(
-        matches
-          .filter((m) => m.id !== id)
-          .map((m) => (m.id === targetMatch.id ? mergedMatch : m))
-      );
-      return;
-    }
-
-    // Keep card exactly where it was dropped (no grid snapping)
+    // Pairs cannot be merged together - keep card exactly where it was dropped
     const finalMatch = {
       ...draggedMatch,
       x: Math.max(0, data.x), // Ensure not negative
@@ -287,13 +261,17 @@ const ReviewMatches = () => {
   };
 
   const handleProfileStop = (id, data) => {
-    const PROFILE_WIDTH = 140;
-    const PROFILE_HEIGHT = 140;
-    const MATCH_WIDTH = 280;
-    const MATCH_HEIGHT = 140;
+    const PROFILE_WIDTH = 120;
+    const PROFILE_HEIGHT = 80;
+    const MATCH_WIDTH = 240;
+    const MATCH_HEIGHT = 100;
     const PADDING = 20;
-    const PROXIMITY_THRESHOLD = 250; // Increased for easier combining
     const SIDEBAR_WIDTH = 350; // Updated to match CSS
+
+    // Helper to check if two rectangles overlap
+    const checkOverlap = (x1, y1, w1, h1, x2, y2, w2, h2) => {
+      return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
+    };
 
     const draggedProfile = {
       ...profiles.find((p) => p.id === id),
@@ -308,58 +286,7 @@ const ReviewMatches = () => {
 
     // If dropped in sidebar area, check if it's over a match card
     if (isSidebarDrop) {
-      // Get all sidebar match elements and check if profile was dropped on one
-      const sidebarMatches = matches.filter(
-        (m) => m.location === "sidebar" && !m.person3
-      );
-
-      // Find which match card (if any) the profile was dropped on
-      // We'll use a simple approach: check the vertical position
-      const sidebarElement = document.querySelector(".sidebar-content");
-      const sidebarRect = sidebarElement?.getBoundingClientRect();
-
-      if (sidebarRect) {
-        const relativeY = data.y; // Y position relative to drag start
-        const mouseY = window.event?.clientY || 0;
-
-        // Get all match card elements in sidebar
-        const matchElements = document.querySelectorAll(".sidebar-item");
-        let targetMatchId = null;
-
-        matchElements.forEach((element, index) => {
-          const rect = element.getBoundingClientRect();
-          if (mouseY >= rect.top && mouseY <= rect.bottom) {
-            // Found the match card we're hovering over
-            const sidebarMatchesArray = sidebarMatches;
-            if (sidebarMatchesArray[index]) {
-              targetMatchId = sidebarMatchesArray[index].id;
-            }
-          }
-        });
-
-        if (targetMatchId) {
-          console.log("Profile dropped on match:", targetMatchId);
-          const targetMatch = matches.find((m) => m.id === targetMatchId);
-
-          if (targetMatch && !targetMatch.person3) {
-            // Convert pair to triple
-            const updatedMatch = {
-              ...targetMatch,
-              person3: draggedProfile.name,
-            };
-
-            // Remove the profile and update the match
-            setProfiles(profiles.filter((p) => p.id !== id));
-            setMatches(
-              matches.map((m) => (m.id === targetMatchId ? updatedMatch : m))
-            );
-            console.log("Created triple:", updatedMatch);
-            return;
-          }
-        }
-      }
-
-      // If not dropped on a specific match, just remove from canvas
+      // Profile dropped in sidebar - do nothing (can't add to existing pairs)
       return;
     }
 
@@ -369,53 +296,25 @@ const ReviewMatches = () => {
     );
 
     // CHECK FOR COMBINING FIRST (before collision detection)
+    // Only combine if cards actually overlap - PAIRS ONLY
     const nearbyProfiles = updatedProfiles.filter((p) => {
       if (p.id === id) return false;
-      const distance = Math.sqrt(
-        Math.pow(p.x - draggedProfile.x, 2) +
-          Math.pow(p.y - draggedProfile.y, 2)
+      if (p.location === "sidebar") return false;
+      return checkOverlap(
+        draggedProfile.x,
+        draggedProfile.y,
+        PROFILE_WIDTH,
+        PROFILE_HEIGHT,
+        p.x,
+        p.y,
+        PROFILE_WIDTH,
+        PROFILE_HEIGHT
       );
-      return distance < PROXIMITY_THRESHOLD;
     });
 
-    // Also check for nearby matches (to add a third person to a pair)
-    const nearbyMatches = matches.filter((m) => {
-      const distance = Math.sqrt(
-        Math.pow(m.x - draggedProfile.x, 2) +
-          Math.pow(m.y - draggedProfile.y, 2)
-      );
-      return distance < PROXIMITY_THRESHOLD && !m.person3; // Only pairs, not existing triples
-    });
-
-    // If there's a nearby match (pair), add this profile to make a triple
-    if (nearbyMatches.length === 1 && nearbyProfiles.length === 0) {
-      const matchToExpand = nearbyMatches[0];
-
-      console.log(
-        "Adding profile to existing match:",
-        draggedProfile.name,
-        "to",
-        matchToExpand
-      );
-
-      const expandedMatch = {
-        ...matchToExpand,
-        person3: draggedProfile.name,
-      };
-
-      // Remove the profile and update the match
-      setProfiles(updatedProfiles.filter((p) => p.id !== id));
-      setMatches(
-        matches.map((m) => (m.id === matchToExpand.id ? expandedMatch : m))
-      );
-
-      console.log("Created triple:", expandedMatch);
-      return; // Exit early
-    }
-
-    // If there are nearby profiles, combine them
-    if (nearbyProfiles.length > 0 && nearbyProfiles.length <= 2) {
-      const profilesToCombine = [draggedProfile, ...nearbyProfiles]; // Don't slice, allow all
+    // If there's exactly one nearby profile, combine them into a pair
+    if (nearbyProfiles.length === 1) {
+      const profilesToCombine = [draggedProfile, nearbyProfiles[0]];
 
       console.log(
         "Combining profiles:",
@@ -449,15 +348,19 @@ const ReviewMatches = () => {
         type: "match",
         person1: person1,
         person2: person2,
-        person3: profilesToCombine[2]?.name, // Optional third person
         x: avgX,
         y: avgY,
         gender: profilesToCombine[0].gender,
         rating: 3,
-        notes: "Manually combined group", // Default note
+        notes: "Manually combined pair", // Default note
         person1Notes: profilesToCombine[0].notes, // Preserve notes
+        person1Sleep: profilesToCombine[0].sleep,
+        person1Social: profilesToCombine[0].social,
+        person1Athlete: profilesToCombine[0].athlete,
         person2Notes: profilesToCombine[1].notes, // Preserve notes
-        person3Notes: profilesToCombine[2]?.notes, // Preserve notes
+        person2Sleep: profilesToCombine[1].sleep,
+        person2Social: profilesToCombine[1].social,
+        person2Athlete: profilesToCombine[1].athlete,
         location: "canvas", // New matches go to canvas
         hasWarning: hasWarning, // Preserve warning if it's a warning pair
       };
@@ -565,18 +468,14 @@ const ReviewMatches = () => {
       ? matchToSplit.y
       : 0;
 
-    // Create individual profiles for each person in the match
-    const people = [
-      matchToSplit.person1,
-      matchToSplit.person2,
-      matchToSplit.person3,
-      matchToSplit.person4,
-    ].filter(Boolean); // Filter out undefined/null
+    // Create individual profiles for each person in the pair
+    const people = [matchToSplit.person1, matchToSplit.person2].filter(Boolean); // Filter out undefined/null
 
     const newProfiles = people.map((personName, index) => {
       // Calculate offset based on index to spread them out
       // e.g. -120, -40, 40, 120
       const offset = (index - (people.length - 1) / 2) * 100;
+      const personNum = index + 1;
 
       return {
         id: `profile-${nextProfileId + index}`,
@@ -586,7 +485,10 @@ const ReviewMatches = () => {
         y: startY,
         gender: matchToSplit.gender,
         location: matchToSplit.location || "canvas",
-        notes: matchToSplit[`person${index + 1}Notes`], // Preserve notes
+        notes: matchToSplit[`person${personNum}Notes`], // Preserve notes
+        sleep: matchToSplit[`person${personNum}Sleep`], // Preserve sleep
+        social: matchToSplit[`person${personNum}Social`], // Preserve social
+        athlete: matchToSplit[`person${personNum}Athlete`], // Preserve athlete
       };
     });
 
@@ -606,9 +508,7 @@ const ReviewMatches = () => {
     const matchesSearch =
       searchQuery === "" ||
       match.person1.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      match.person2.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (match.person3 &&
-        match.person3.toLowerCase().includes(searchQuery.toLowerCase()));
+      match.person2.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesGender && matchesSearch;
   });
 
@@ -733,6 +633,7 @@ const ReviewMatches = () => {
                     handleProfileStop(id, data);
                     handleProfileDragEnd();
                   }}
+                  isInWorkspace={false}
                 />
               </div>
             ))}
@@ -781,6 +682,7 @@ const ReviewMatches = () => {
                   handleProfileStop(id, data);
                   handleProfileDragEnd();
                 }}
+                isInWorkspace={true}
               />
             ))}
           </div>
