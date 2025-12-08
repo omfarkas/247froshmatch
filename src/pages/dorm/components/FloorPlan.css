@@ -63,7 +63,14 @@
 
 .room:hover {
   filter: brightness(0.92);
-  stroke-width: 2.5;
+  stroke-width: 3;
+  stroke: #48463e !important;
+}
+
+.room.hovered {
+  stroke: #48463e !important;
+  stroke-width: 3;
+  filter: brightness(0.95) drop-shadow(0 0 4px rgba(72, 70, 62, 0.3));
 }
 
 .room.selected {
@@ -381,4 +388,115 @@
   .floor-name {
     font-size: 0.6rem;
   }
+}
+
+/* Room Hover Tooltip */
+.room-hover-tooltip {
+  position: absolute;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-width: 180px;
+  max-width: 220px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  z-index: 100;
+  animation: tooltipFadeIn 0.15s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tooltip-room-id {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+}
+
+.tooltip-zone {
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  background: var(--color-surface-alt);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.tooltip-students {
+  margin-bottom: 8px;
+}
+
+.tooltip-student-name {
+  font-size: 0.8rem;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.tooltip-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tooltip-stat {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-alt);
+  padding: 4px 8px;
+  border-radius: 5px;
+  min-width: 45px;
+}
+
+.tooltip-stat .stat-label {
+  font-size: 0.6rem;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tooltip-stat .stat-value {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.tooltip-stat .stat-value.capitalize {
+  text-transform: capitalize;
+}
+
+.tooltip-stat.athlete {
+  background: rgba(140, 21, 21, 0.1);
+  border: 1px solid rgba(140, 21, 21, 0.2);
+}
+
+.tooltip-stat.athlete .stat-label {
+  color: #8c1515;
+  font-weight: 600;
+}
+
+.tooltip-swap-hint {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--color-border);
+  font-size: 0.7rem;
+  color: #2e6f40;
+  font-weight: 600;
+  text-align: center;
 }

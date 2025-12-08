@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import "./FloorPlan.css";
 
 function FloorPlan({
@@ -14,6 +15,44 @@ function FloorPlan({
   activeLens,
   swapSource,
 }) {
+  const [hoveredRoom, setHoveredRoom] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const svgRef = useRef(null);
+
+  const handleRoomMouseEnter = (room, event) => {
+    if (swapSource?.id === room.id) return; // Don't show tooltip for swap source
+    setHoveredRoom(room);
+
+    // Get position relative to the SVG container
+    const svgRect = svgRef.current?.getBoundingClientRect();
+    if (svgRect) {
+      const x = event.clientX - svgRect.left;
+      const y = event.clientY - svgRect.top;
+      setTooltipPosition({ x, y });
+    }
+  };
+
+  const handleRoomMouseLeave = () => {
+    setHoveredRoom(null);
+  };
+
+  const handleRoomMouseMove = (event) => {
+    if (!hoveredRoom) return;
+    const svgRect = svgRef.current?.getBoundingClientRect();
+    if (svgRect) {
+      const x = event.clientX - svgRect.left;
+      const y = event.clientY - svgRect.top;
+      setTooltipPosition({ x, y });
+    }
+  };
+
+  // Helper to get student name string
+  const getStudentName = (student) => {
+    if (typeof student === "string") return student;
+    if (student && student.firstName)
+      return `${student.firstName} ${student.lastName}`;
+    return "Unknown";
+  };
   // Extract zone type from zone ID (e.g., "floor1-west" -> "west")
   const getZoneType = (zoneId) => {
     return zoneId.split("-").slice(1).join("-");
@@ -31,6 +70,7 @@ function FloorPlan({
   const isRoomHighlighted = (roomId) => {
     if (swapSource?.id === roomId) return "swap-source";
     if (selectedRoom?.id === roomId) return "selected";
+    if (hoveredRoom?.id === roomId) return "hovered";
     // Highlight rooms in selected zone
     if (selectedZone) {
       const room = floor.rooms.find((r) => r.id === roomId);
@@ -167,9 +207,11 @@ function FloorPlan({
         </div>
 
         <svg
+          ref={svgRef}
           className="floor-plan"
           viewBox="0 0 870 460"
           preserveAspectRatio="xMidYMid meet"
+          onMouseMove={handleRoomMouseMove}
         >
           {/* Floor outline */}
           <rect
@@ -220,7 +262,12 @@ function FloorPlan({
             const height = isVerticalWing ? 50 : 25;
 
             return (
-              <g key={room.id} className={`room-group ${highlight}`}>
+              <g
+                key={room.id}
+                className={`room-group ${highlight}`}
+                onMouseEnter={(e) => handleRoomMouseEnter(room, e)}
+                onMouseLeave={handleRoomMouseLeave}
+              >
                 <rect
                   x={room.position.x}
                   y={room.position.y}
@@ -252,6 +299,51 @@ function FloorPlan({
             );
           })}
         </svg>
+
+        {/* Hover tooltip */}
+        {hoveredRoom && (
+          <div
+            className="room-hover-tooltip"
+            style={{
+              left: tooltipPosition.x + 15,
+              top: tooltipPosition.y - 10,
+            }}
+          >
+            <div className="tooltip-header">
+              <span className="tooltip-room-id">Room {hoveredRoom.id}</span>
+              <span className="tooltip-zone">{hoveredRoom.zone}</span>
+            </div>
+            <div className="tooltip-students">
+              {hoveredRoom.students.map((student, idx) => (
+                <div key={idx} className="tooltip-student-name">
+                  {getStudentName(student)}
+                </div>
+              ))}
+            </div>
+            <div className="tooltip-stats">
+              <div className="tooltip-stat">
+                <span className="stat-label">Social</span>
+                <span className="stat-value">
+                  {hoveredRoom.preferences.social}/10
+                </span>
+              </div>
+              <div className="tooltip-stat">
+                <span className="stat-label">Sleep</span>
+                <span className="stat-value capitalize">
+                  {hoveredRoom.preferences.sleep}
+                </span>
+              </div>
+              {hoveredRoom.preferences.varsity && (
+                <div className="tooltip-stat athlete">
+                  <span className="stat-label">🏃 Athlete</span>
+                </div>
+              )}
+            </div>
+            {swapSource && (
+              <div className="tooltip-swap-hint">Click to swap</div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
