@@ -333,11 +333,12 @@ function FloorPlan({
                   {hoveredRoom.preferences.sleep}
                 </span>
               </div>
-              {hoveredRoom.preferences.varsity && (
-                <div className="tooltip-stat athlete">
-                  <span className="stat-label">🏃 Athlete</span>
-                </div>
-              )}
+              <div className="tooltip-stat">
+                <span className="stat-label">Athlete</span>
+                <span className="stat-value">
+                  {hoveredRoom.preferences.varsity ? "Yes" : "No"}
+                </span>
+              </div>
             </div>
             {swapSource && (
               <div className="tooltip-swap-hint">Click to swap</div>

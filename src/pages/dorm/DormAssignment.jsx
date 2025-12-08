@@ -735,6 +735,8 @@ function DormAssignment() {
   const [selectedZone, setSelectedZone] = useState(null);
   const [activeLens, setActiveLens] = useState("social");
   const [swapSource, setSwapSource] = useState(null);
+  const [swapTarget, setSwapTarget] = useState(null);
+  const [showSwapConfirm, setShowSwapConfirm] = useState(false);
   const [floors, setFloors] = useState(ALL_FLOORS);
   const [allZones, setAllZones] = useState({
     1: createInitialZones(1),
@@ -767,17 +769,14 @@ function DormAssignment() {
         setSwapSource(null);
         setSelectedRoom(room); // Show room info
       } else {
-        // Execute swap immediately without confirmation
-        executeSwap(swapSource, room);
+        // Show swap confirmation
+        setSwapTarget(room);
+        setShowSwapConfirm(true);
       }
     } else {
-      // Toggle room selection - click same room to deselect
-      if (selectedRoom?.id === room.id) {
-        setSelectedRoom(null);
-      } else {
-        setSelectedRoom(room);
-        setSelectedZone(null);
-      }
+      // Show room info panel
+      setSelectedRoom(room);
+      setSelectedZone(null);
     }
   };
 
@@ -802,14 +801,14 @@ function DormAssignment() {
     setSelectedZone(null);
   };
 
-  const executeSwap = (sourceRoom, targetRoom) => {
-    if (!sourceRoom || !targetRoom) return;
+  const confirmSwap = () => {
+    if (!swapSource || !swapTarget) return;
 
     const newFloors = JSON.parse(JSON.stringify(floors));
     const floor = newFloors[currentFloorIndex];
 
-    const rA = floor.rooms.find((r) => r.id === sourceRoom.id);
-    const rB = floor.rooms.find((r) => r.id === targetRoom.id);
+    const rA = floor.rooms.find((r) => r.id === swapSource.id);
+    const rB = floor.rooms.find((r) => r.id === swapTarget.id);
 
     const tempStudents = rA.students;
     const tempPreferences = rA.preferences;
@@ -822,8 +821,14 @@ function DormAssignment() {
 
     setFloors(newFloors);
     setSwapSource(null);
-    // After swap, select the target room to show the new occupants
-    setSelectedRoom(rB);
+    setSwapTarget(null);
+    setShowSwapConfirm(false);
+    setSelectedRoom(null);
+  };
+
+  const cancelSwapConfirm = () => {
+    setSwapTarget(null);
+    setShowSwapConfirm(false);
   };
 
   const cancelSwap = () => {
@@ -981,19 +986,6 @@ function DormAssignment() {
             </p>
           </div>
           <div className="header-controls">
-            {/* Progress Tracker */}
-            <div className="progress-tracker">
-              <span className="progress-label">
-                {totalApproved}/{totalSections}
-              </span>
-              <div className="progress-bar-container">
-                <div
-                  className="progress-bar-fill"
-                  style={{ width: `${(totalApproved / totalSections) * 100}%` }}
-                />
-              </div>
-            </div>
-
             <div className="lens-selector">
               <span className="lens-label">Lens:</span>
               <div className="lens-buttons">
@@ -1033,6 +1025,19 @@ function DormAssignment() {
                 </div>
               </div>
             )}
+
+            {/* Progress Tracker */}
+            <div className="progress-tracker">
+              <span className="progress-label">
+                {totalApproved}/{totalSections}
+              </span>
+              <div className="progress-bar-container">
+                <div
+                  className="progress-bar-fill"
+                  style={{ width: `${(totalApproved / totalSections) * 100}%` }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1073,6 +1078,34 @@ function DormAssignment() {
           floor={currentFloor}
         />
       </div>
+
+      {/* Swap Confirmation Modal */}
+      {showSwapConfirm && swapSource && swapTarget && (
+        <div className="swap-modal-overlay">
+          <div className="swap-modal">
+            <h3>Confirm Room Swap</h3>
+            <div className="swap-details">
+              <div className="swap-room">
+                <strong>Room {swapSource.id}</strong>
+                <p>{swapSource.students.join(" & ")}</p>
+              </div>
+              <div className="swap-arrow">⇄</div>
+              <div className="swap-room">
+                <strong>Room {swapTarget.id}</strong>
+                <p>{swapTarget.students.join(" & ")}</p>
+              </div>
+            </div>
+            <div className="swap-actions">
+              <button className="swap-cancel" onClick={cancelSwapConfirm}>
+                Cancel
+              </button>
+              <button className="swap-confirm" onClick={confirmSwap}>
+                Confirm Swap
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -26,17 +26,6 @@ function IssuePanel({
         </div>
 
         <div className="panel-content">
-          <div className="zone-status-card">
-            <div className="status-header">
-              <span className="status-label">Status</span>
-              <span className={`status-badge ${selectedZone.status}`}>
-                {selectedZone.status === "approved"
-                  ? "✓ Approved"
-                  : "Pending Review"}
-              </span>
-            </div>
-          </div>
-
           <div className="zone-stats">
             <h3>Area Stats</h3>
             <div className="stat-grid">
@@ -110,26 +99,30 @@ function IssuePanel({
       <div className="issue-panel empty">
         <div className="empty-state">
           <div className="empty-icon">🏠</div>
-          <h3>Review Dorm Assignments</h3>
-          <div className="instructions">
-            <p>
-              <strong>1.</strong> Click a section tab below to review & approve
-            </p>
-            <p>
-              <strong>2.</strong> Click any room to see details & swap
-            </p>
-          </div>
+          <p>Select a room to view details</p>
         </div>
       </div>
     );
   }
 
-  // Swap mode active - room selected for swap
+  // Helper to get student display info
+  const getStudentInfo = (student) => {
+    if (typeof student === "string") return { name: student, location: null };
+    if (student && student.firstName) {
+      return {
+        name: `${student.firstName} ${student.lastName}`,
+        location: student.location || student.city,
+      };
+    }
+    return { name: "Unknown", location: null };
+  };
+
+  // Swap mode active - room selected for swap (show full info + swap indicator)
   if (swapSource) {
     return (
       <div className="issue-panel swap-mode">
         <div className="panel-header">
-          <h3 className="panel-title">Swapping Room {swapSource.id}</h3>
+          <h3 className="panel-title">Room {swapSource.id}</h3>
           <button
             className="close-btn"
             onClick={onCancelSwap}
@@ -139,37 +132,122 @@ function IssuePanel({
           </button>
         </div>
         <div className="panel-content">
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
-              <div style={{ fontSize: '11px', color: '#666' }}>Social</div>
-              <div style={{ fontWeight: 'bold' }}>{swapSource.preferences.social}/10</div>
+          {/* Swap mode indicator */}
+          <div className="swap-mode-banner">
+            <span>Click another room to swap</span>
+          </div>
+
+          {/* Occupants */}
+          <div style={{ marginBottom: "12px" }}>
+            {swapSource.students.map((student, idx) => {
+              const info = getStudentInfo(student);
+              return (
+                <div key={idx} style={{ marginBottom: "6px" }}>
+                  <span style={{ fontWeight: "600" }}>{info.name}</span>
+                  {info.location && (
+                    <span
+                      style={{
+                        color: "#666",
+                        fontSize: "12px",
+                        marginLeft: "6px",
+                      }}
+                    >
+                      — {info.location}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Compact stats row */}
+          <div
+            className="compact-stats"
+            style={{ display: "flex", gap: "12px", marginBottom: "12px" }}
+          >
+            <div
+              style={{
+                flex: 1,
+                textAlign: "center",
+                padding: "8px",
+                background: "var(--color-surface-alt)",
+                borderRadius: "6px",
+              }}
+            >
+              <div style={{ fontSize: "11px", color: "#666" }}>Social</div>
+              <div style={{ fontWeight: "bold" }}>
+                {swapSource.preferences.social}/10
+              </div>
             </div>
-            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
-              <div style={{ fontSize: '11px', color: '#666' }}>Sleep</div>
-              <div style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>{swapSource.preferences.sleep}</div>
+            <div
+              style={{
+                flex: 1,
+                textAlign: "center",
+                padding: "8px",
+                background: "var(--color-surface-alt)",
+                borderRadius: "6px",
+              }}
+            >
+              <div style={{ fontSize: "11px", color: "#666" }}>Sleep</div>
+              <div style={{ fontWeight: "bold", textTransform: "capitalize" }}>
+                {swapSource.preferences.sleep}
+              </div>
             </div>
-            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
-              <div style={{ fontSize: '11px', color: '#666' }}>Athlete</div>
-              <div style={{ fontWeight: 'bold' }}>{swapSource.preferences.varsity ? "Yes" : "No"}</div>
+            <div
+              style={{
+                flex: 1,
+                textAlign: "center",
+                padding: "8px",
+                background: "var(--color-surface-alt)",
+                borderRadius: "6px",
+              }}
+            >
+              <div style={{ fontSize: "11px", color: "#666" }}>Athlete</div>
+              <div style={{ fontWeight: "bold" }}>
+                {swapSource.preferences.varsity ? "Yes" : "No"}
+              </div>
             </div>
           </div>
-          <p style={{ fontSize: '12px', color: '#666', textAlign: 'center' }}>Click another room to swap</p>
+
+          {/* Interests with header */}
+          <div style={{ marginBottom: "12px" }}>
+            <div
+              style={{
+                fontSize: "11px",
+                color: "#666",
+                marginBottom: "6px",
+                fontWeight: "500",
+              }}
+            >
+              Interests
+            </div>
+            <div
+              className="tags"
+              style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}
+            >
+              {swapSource.preferences.interests.map((interest, i) => (
+                <span
+                  key={i}
+                  className="tag"
+                  style={{ fontSize: "11px", padding: "4px 8px" }}
+                >
+                  {interest}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <button
+            className="action-btn cancel"
+            onClick={onCancelSwap}
+            style={{ width: "100%" }}
+          >
+            Cancel Swap
+          </button>
         </div>
       </div>
     );
   }
-
-  // Helper to get student display info
-  const getStudentInfo = (student) => {
-    if (typeof student === 'string') return { name: student, location: null };
-    if (student && student.firstName) {
-      return { 
-        name: `${student.firstName} ${student.lastName}`,
-        location: student.location || student.city
-      };
-    }
-    return { name: 'Unknown', location: null };
-  };
 
   // Room info display
   if (selectedRoom) {
@@ -184,14 +262,20 @@ function IssuePanel({
 
         <div className="panel-content">
           {/* Occupants */}
-          <div style={{ marginBottom: '12px' }}>
+          <div style={{ marginBottom: "12px" }}>
             {selectedRoom.students.map((student, idx) => {
               const info = getStudentInfo(student);
               return (
-                <div key={idx} style={{ marginBottom: '6px' }}>
-                  <span style={{ fontWeight: '600' }}>{info.name}</span>
+                <div key={idx} style={{ marginBottom: "6px" }}>
+                  <span style={{ fontWeight: "600" }}>{info.name}</span>
                   {info.location && (
-                    <span style={{ color: '#666', fontSize: '12px', marginLeft: '6px' }}>
+                    <span
+                      style={{
+                        color: "#666",
+                        fontSize: "12px",
+                        marginLeft: "6px",
+                      }}
+                    >
                       — {info.location}
                     </span>
                   )}
@@ -201,27 +285,76 @@ function IssuePanel({
           </div>
 
           {/* Compact stats row */}
-          <div className="compact-stats" style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
-              <div style={{ fontSize: '11px', color: '#666' }}>Social</div>
-              <div style={{ fontWeight: 'bold' }}>{selectedRoom.preferences.social}/10</div>
+          <div
+            className="compact-stats"
+            style={{ display: "flex", gap: "12px", marginBottom: "12px" }}
+          >
+            <div
+              style={{
+                flex: 1,
+                textAlign: "center",
+                padding: "8px",
+                background: "var(--color-surface-alt)",
+                borderRadius: "6px",
+              }}
+            >
+              <div style={{ fontSize: "11px", color: "#666" }}>Social</div>
+              <div style={{ fontWeight: "bold" }}>
+                {selectedRoom.preferences.social}/10
+              </div>
             </div>
-            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
-              <div style={{ fontSize: '11px', color: '#666' }}>Sleep</div>
-              <div style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>{selectedRoom.preferences.sleep}</div>
+            <div
+              style={{
+                flex: 1,
+                textAlign: "center",
+                padding: "8px",
+                background: "var(--color-surface-alt)",
+                borderRadius: "6px",
+              }}
+            >
+              <div style={{ fontSize: "11px", color: "#666" }}>Sleep</div>
+              <div style={{ fontWeight: "bold", textTransform: "capitalize" }}>
+                {selectedRoom.preferences.sleep}
+              </div>
             </div>
-            <div style={{ flex: 1, textAlign: 'center', padding: '8px', background: 'var(--color-surface-alt)', borderRadius: '6px' }}>
-              <div style={{ fontSize: '11px', color: '#666' }}>Athlete</div>
-              <div style={{ fontWeight: 'bold' }}>{selectedRoom.preferences.varsity ? "Yes" : "No"}</div>
+            <div
+              style={{
+                flex: 1,
+                textAlign: "center",
+                padding: "8px",
+                background: "var(--color-surface-alt)",
+                borderRadius: "6px",
+              }}
+            >
+              <div style={{ fontSize: "11px", color: "#666" }}>Athlete</div>
+              <div style={{ fontWeight: "bold" }}>
+                {selectedRoom.preferences.varsity ? "Yes" : "No"}
+              </div>
             </div>
           </div>
 
           {/* Interests with header */}
-          <div style={{ marginBottom: '12px' }}>
-            <div style={{ fontSize: '11px', color: '#666', marginBottom: '6px', fontWeight: '500' }}>Interests</div>
-            <div className="tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+          <div style={{ marginBottom: "12px" }}>
+            <div
+              style={{
+                fontSize: "11px",
+                color: "#666",
+                marginBottom: "6px",
+                fontWeight: "500",
+              }}
+            >
+              Interests
+            </div>
+            <div
+              className="tags"
+              style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}
+            >
               {selectedRoom.preferences.interests.map((interest, i) => (
-                <span key={i} className="tag" style={{ fontSize: '11px', padding: '4px 8px' }}>
+                <span
+                  key={i}
+                  className="tag"
+                  style={{ fontSize: "11px", padding: "4px 8px" }}
+                >
                   {interest}
                 </span>
               ))}
@@ -230,9 +363,13 @@ function IssuePanel({
 
           {/* Location insights - condensed */}
           {roomContext && roomContext.length > 0 && (
-            <div style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
+            <div
+              style={{ fontSize: "12px", color: "#666", marginBottom: "12px" }}
+            >
               {roomContext.slice(0, 2).map((insight, i) => (
-                <div key={i} style={{ marginBottom: '4px' }}>📍 {insight}</div>
+                <div key={i} style={{ marginBottom: "4px" }}>
+                  📍 {insight}
+                </div>
               ))}
             </div>
           )}
@@ -240,7 +377,7 @@ function IssuePanel({
           <button
             className="action-btn primary"
             onClick={() => onInitiateSwap(selectedRoom)}
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
           >
             Swap This Room
           </button>

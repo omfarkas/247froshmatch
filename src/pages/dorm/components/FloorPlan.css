@@ -486,7 +486,8 @@
   border: 1px solid rgba(140, 21, 21, 0.2);
 }
 
-.tooltip-stat.athlete .stat-label {
+.tooltip-stat.athlete .stat-label,
+.tooltip-stat.athlete .stat-value {
   color: #8c1515;
   font-weight: 600;
 }
