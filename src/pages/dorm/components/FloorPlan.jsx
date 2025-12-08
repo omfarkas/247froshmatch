@@ -89,9 +89,9 @@ function FloorPlan({
       case "east":
         return { x: 796, y: 250 };
       case "north-west":
-        return { x: 293, y: 75 };
+        return { x: 285, y: 75 };
       case "north-east":
-        return { x: 593, y: 75 };
+        return { x: 585, y: 75 };
       default:
         return { x: 0, y: 0 };
     }
@@ -300,10 +300,9 @@ function FloorPlan({
 
               // Create short label for the zone
               const getShortLabel = () => {
-                if (zoneType === "west") return "West Wing";
-                if (zoneType === "east") return "East Wing";
-                if (zoneType === "north-west") return "NW Hall";
-                if (zoneType === "north-east") return "NE Hall";
+                if (zoneType === "west" || zoneType === "east") return "Wing";
+                if (zoneType === "north-west" || zoneType === "north-east")
+                  return "Hall";
                 return zone.label;
               };
 

@@ -518,23 +518,22 @@
   transition: all 0.2s ease;
 }
 
-/* Pending state - needs review (purple/indigo) */
+/* Pending state - needs review (charcoal/brown) */
 .zone-map-btn.pending {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: linear-gradient(135deg, #48463e, #2d2c28);
   color: white;
-  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.45);
+  box-shadow: 0 3px 10px rgba(72, 70, 62, 0.5);
 }
 
 .zone-map-btn.pending:hover {
   transform: scale(1.08) translateY(-2px);
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.55);
-  filter: brightness(1.1);
+  box-shadow: 0 6px 16px rgba(72, 70, 62, 0.6);
+  filter: brightness(1.2);
 }
 
 .zone-map-btn.pending.selected {
   transform: scale(1.05);
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.55),
-    0 0 0 3px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 14px rgba(72, 70, 62, 0.6), 0 0 0 3px rgba(72, 70, 62, 0.3);
 }
 
 /* Approved state - done (green) */
