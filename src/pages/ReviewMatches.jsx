@@ -272,62 +272,15 @@ const ReviewMatches = () => {
       return;
     }
 
-    // Snap to grid on canvas with collision avoidance
-    const GRID_SIZE = 150; // Grid spacing
-    let snappedX = Math.round(data.x / GRID_SIZE) * GRID_SIZE;
-    let snappedY = Math.round(data.y / GRID_SIZE) * GRID_SIZE;
-
-    // Find nearest empty slot if current one is occupied
-    const isOccupied = (x, y) => {
-      return matches.some(
-        (m) =>
-          m.id !== id &&
-          m.location !== "sidebar" &&
-          Math.abs(m.x - x) < 50 &&
-          Math.abs(m.y - y) < 50
-      );
-    };
-
-    if (isOccupied(snappedX, snappedY)) {
-      // Spiral search for nearest empty slot
-      let found = false;
-      let radius = 1;
-      while (!found && radius < 5) {
-        // Limit search radius
-        const directions = [
-          [0, -1],
-          [1, -1],
-          [1, 0],
-          [1, 1],
-          [0, 1],
-          [-1, 1],
-          [-1, 0],
-          [-1, -1],
-        ];
-
-        for (const [dx, dy] of directions) {
-          const testX = snappedX + dx * radius * GRID_SIZE;
-          const testY = snappedY + dy * radius * GRID_SIZE;
-
-          if (!isOccupied(testX, testY) && testX >= 0 && testY >= 0) {
-            snappedX = testX;
-            snappedY = testY;
-            found = true;
-            break;
-          }
-        }
-        radius++;
-      }
-    }
-
-    const snappedMatch = {
+    // Keep card exactly where it was dropped (no grid snapping)
+    const finalMatch = {
       ...draggedMatch,
-      x: snappedX,
-      y: snappedY,
+      x: Math.max(0, data.x), // Ensure not negative
+      y: Math.max(0, data.y), // Ensure not negative
       location: "canvas", // Ensure location is updated to canvas
     };
 
-    const updatedMatches = matches.map((m) => (m.id === id ? snappedMatch : m));
+    const updatedMatches = matches.map((m) => (m.id === id ? finalMatch : m));
     setMatches(updatedMatches);
   };
 
