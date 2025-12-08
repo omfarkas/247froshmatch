@@ -98,7 +98,7 @@ function IssuePanel({
     return (
       <div className="issue-panel empty">
         <div className="empty-state">
-          <div className="empty-icon">🏠</div>
+          <h3 className="welcome-text">Instructions</h3>
           <div className="help-section">
             <div className="help-item">
               <span className="help-number">1</span>
