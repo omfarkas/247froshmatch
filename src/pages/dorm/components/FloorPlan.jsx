@@ -81,6 +81,22 @@ function FloorPlan({
     return "";
   };
 
+  // Zone button positions on the map
+  const getZoneButtonPosition = (zoneType) => {
+    switch (zoneType) {
+      case "west":
+        return { x: 75, y: 250 };
+      case "east":
+        return { x: 796, y: 250 };
+      case "north-west":
+        return { x: 293, y: 75 };
+      case "north-east":
+        return { x: 593, y: 75 };
+      default:
+        return { x: 0, y: 0 };
+    }
+  };
+
   const getRoomStyle = (room) => {
     if (activeLens === "none") return {};
 
@@ -159,32 +175,7 @@ function FloorPlan({
       <div className="floor-plan-wrapper">
         {/* Controls row above map */}
         <div className="map-controls-row">
-          {/* Section tabs on left */}
-          <div className="section-tabs">
-            <span className="section-tabs-label">Sections:</span>
-            <div className="section-tabs-list">
-              {zones &&
-                zones.map((zone) => {
-                  const isSelected = selectedZone?.id === zone.id;
-                  const isApproved = zone.status === "approved";
-
-                  return (
-                    <button
-                      key={zone.id}
-                      className={`section-tab ${isSelected ? "selected" : ""} ${
-                        isApproved ? "approved" : "pending"
-                      }`}
-                      onClick={() => onZoneClick(zone)}
-                    >
-                      {isApproved && <span className="tab-check">✓</span>}
-                      {zone.label}
-                    </button>
-                  );
-                })}
-            </div>
-          </div>
-
-          {/* Floor navigation on right */}
+          {/* Floor navigation centered */}
           <div className="floor-nav">
             <button
               className="floor-nav-btn"
@@ -298,6 +289,50 @@ function FloorPlan({
               </g>
             );
           })}
+
+          {/* Zone review buttons */}
+          {zones &&
+            zones.map((zone) => {
+              const zoneType = getZoneType(zone.id);
+              const pos = getZoneButtonPosition(zoneType);
+              const isSelected = selectedZone?.id === zone.id;
+              const isApproved = zone.status === "approved";
+
+              // Create short label for the zone
+              const getShortLabel = () => {
+                if (zoneType === "west") return "West Wing";
+                if (zoneType === "east") return "East Wing";
+                if (zoneType === "north-west") return "NW Hall";
+                if (zoneType === "north-east") return "NE Hall";
+                return zone.label;
+              };
+
+              return (
+                <foreignObject
+                  key={zone.id}
+                  x={pos.x - 70}
+                  y={pos.y - 16}
+                  width="140"
+                  height="32"
+                  style={{ overflow: "visible" }}
+                >
+                  <div className="zone-btn-wrapper">
+                    <button
+                      className={`zone-map-btn ${
+                        isSelected ? "selected" : ""
+                      } ${isApproved ? "approved" : "pending"}`}
+                      onClick={() => onZoneClick(zone)}
+                    >
+                      {isApproved ? (
+                        <>✓ {getShortLabel()}</>
+                      ) : (
+                        <>Review {getShortLabel()}</>
+                      )}
+                    </button>
+                  </div>
+                </foreignObject>
+              );
+            })}
         </svg>
 
         {/* Hover tooltip */}
