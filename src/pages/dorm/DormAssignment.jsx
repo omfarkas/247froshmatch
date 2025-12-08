@@ -34,7 +34,7 @@ const MOCK_FLOORS = [
         id: 102,
         zone: "North Hall",
         position: { x: 200, y: 20 },
-        students: [STUDENTS.barackObama, STUDENTS.mittRomney],
+        students: [STUDENTS.barackObama, STUDENTS.steveIrwin],
         preferences: {
           social: 7,
           quiet: 5,
@@ -648,14 +648,14 @@ const createInitialZones = (floorId) => [
     label: "North Hall (West)",
     stats: { social: "Mixed", sleep: "Mixed", athletes: "0" },
     insights: [
-      "⭐ Joey & Steve (Room 101)—early birds, up at 5am daily",
-      "⭐ Barack & Mitt (Room 102)—policy enthusiasts, late nights",
+      "⭐ Joey & Mitt (Room 101)—early birds, up at 5am daily",
+      "⭐ Barack & Steve (Room 102)—policy enthusiasts, late nights",
       "⭐ Taylor & Sabrina (Room 103)—musicians, very late sleepers",
     ],
     considerations: [
       "⚠️ Room 101 early risers near lounge—may hear late night noise",
       "Room 101 placed far from main entrance for quiet mornings",
-      "Consider: move Joey & Steve to quieter East section?",
+      "Consider: move Joey & Mitt to quieter East section?",
     ],
     status: "pending",
     roomIds: [
@@ -872,13 +872,13 @@ function DormAssignment() {
 
     // Special insights for featured students
     if (room.id === 101) {
-      insights.push("⭐ Joey & Steve—early birds (5am wake up!)");
+      insights.push("⭐ Joey & Mitt—early birds (5am wake up!)");
       insights.push("⚠️ Adjacent to lounge—may hear late night noise");
       insights.push("Consider: swap with Room 109 for quieter location?");
       return insights;
     }
     if (room.id === 102) {
-      insights.push("⭐ Barack & Mitt—public policy enthusiasts");
+      insights.push("⭐ Barack & Steve—public policy enthusiasts");
       insights.push("Night owls—compatible with neighbors");
       insights.push("Good central location for campus involvement");
       return insights;

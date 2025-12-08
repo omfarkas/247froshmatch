@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import MatchCard from "../components/MatchCard";
 import ProfileCard from "../components/ProfileCard";
-import Toolbar from "../components/Toolbar";
+// import Toolbar from "../components/Toolbar"; // Removed
 import TutorialOverlay from "../components/TutorialOverlay";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { useStageContext } from "../contexts/StageContext";
@@ -62,7 +62,7 @@ const ReviewMatches = () => {
   const [profiles, setProfiles] = useState([]);
   const [nextProfileId, setNextProfileId] = useState(1);
 
-  const [scissorMode, setScissorMode] = useState(false);
+  // const [scissorMode, setScissorMode] = useState(false); // Removed
   const [genderFilter, setGenderFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMatches, setSelectedMatches] = useState([]); // Track selected matches
@@ -190,7 +190,7 @@ const ReviewMatches = () => {
     };
 
     // Check if the card was dragged into the sidebar area (x < 0 means it's in the sidebar)
-    const SIDEBAR_WIDTH = 450;
+    const SIDEBAR_WIDTH = 350;
     const canvasElement = document.querySelector(".canvas-area");
     const canvasRect = canvasElement?.getBoundingClientRect();
 
@@ -305,24 +305,22 @@ const ReviewMatches = () => {
     const MATCH_WIDTH = 280;
     const MATCH_HEIGHT = 140;
     const PADDING = 20;
-    const PROXIMITY_THRESHOLD = 150; // For combining
-    const SIDEBAR_WIDTH = 450;
+    const PROXIMITY_THRESHOLD = 250; // Increased for easier combining
+    const SIDEBAR_WIDTH = 350; // Updated to match CSS
 
     const draggedProfile = {
       ...profiles.find((p) => p.id === id),
       x: data.x,
       y: data.y,
+      location: "canvas", // Default to canvas, will be overwritten if in sidebar
     };
 
     // Check if profile was dropped in the sidebar area
-    const canvasElement = document.querySelector(".canvas-area");
-    const canvasRect = canvasElement?.getBoundingClientRect();
-    const absoluteX = canvasRect ? canvasRect.left + data.x : data.x;
-
+    // Simplified check: if x is negative, it's to the left of the canvas (sidebar)
+    const isSidebarDrop = data.x < 0;
+    
     // If dropped in sidebar area, check if it's over a match card
-    if (absoluteX < SIDEBAR_WIDTH) {
-      console.log("Profile dropped in sidebar area");
-
+    if (isSidebarDrop) {
       // Get all sidebar match elements and check if profile was dropped on one
       const sidebarMatches = matches.filter(
         (m) => m.location === "sidebar" && !m.person3
@@ -382,7 +380,7 @@ const ReviewMatches = () => {
     let updatedProfiles = profiles.map((p) =>
       p.id === id ? draggedProfile : p
     );
-
+    
     // CHECK FOR COMBINING FIRST (before collision detection)
     const nearbyProfiles = updatedProfiles.filter((p) => {
       if (p.id === id) return false;
@@ -469,7 +467,10 @@ const ReviewMatches = () => {
         y: avgY,
         gender: profilesToCombine[0].gender,
         rating: 3,
-        notes: "Manually combined group",
+        notes: "Manually combined group", // Default note
+        person1Notes: profilesToCombine[0].notes, // Preserve notes
+        person2Notes: profilesToCombine[1].notes, // Preserve notes
+        person3Notes: profilesToCombine[2]?.notes, // Preserve notes
         location: "canvas", // New matches go to canvas
         hasWarning: hasWarning, // Preserve warning if it's a warning pair
       };
@@ -556,57 +557,55 @@ const ReviewMatches = () => {
   const handleMatchSplit = (matchId) => {
     console.log(
       "handleMatchSplit called for:",
-      matchId,
-      "scissorMode:",
-      scissorMode
+      matchId
     );
-    if (scissorMode) {
-      const matchToSplit = matches.find((m) => m.id === matchId);
-      console.log("Match to split:", matchToSplit);
+    // No scissor mode check needed anymore
+    const matchToSplit = matches.find((m) => m.id === matchId);
+    console.log("Match to split:", matchToSplit);
 
-      if (!matchToSplit) {
-        console.error("Match not found for splitting:", matchId);
-        return;
-      }
-
-      // Ensure coordinates are valid numbers
-      const isSidebarMatch = matchToSplit.location === "sidebar";
-      const startX = isSidebarMatch ? 0 : (typeof matchToSplit.x === "number" ? matchToSplit.x : 0);
-      const startY = isSidebarMatch ? 0 : (typeof matchToSplit.y === "number" ? matchToSplit.y : 0);
-
-      // Create individual profiles for each person in the match
-      const people = [
-        matchToSplit.person1,
-        matchToSplit.person2,
-        matchToSplit.person3,
-        matchToSplit.person4
-      ].filter(Boolean); // Filter out undefined/null
-
-      const newProfiles = people.map((personName, index) => {
-        // Calculate offset based on index to spread them out
-        // e.g. -120, -40, 40, 120
-        const offset = (index - (people.length - 1) / 2) * 100;
-        
-        return {
-          id: `profile-${nextProfileId + index}`,
-          type: "profile",
-          name: personName,
-          x: isSidebarMatch ? 0 : startX + offset,
-          y: startY,
-          gender: matchToSplit.gender,
-          location: matchToSplit.location || "canvas",
-        };
-      });
-
-      console.log("Creating profiles:", newProfiles);
-
-      // Remove the match and add the new profiles
-      setMatches(matches.filter((m) => m.id !== matchId));
-      setProfiles([...profiles, ...newProfiles]);
-      setNextProfileId(nextProfileId + people.length);
-
-      console.log("Split complete");
+    if (!matchToSplit) {
+      console.error("Match not found for splitting:", matchId);
+      return;
     }
+
+    // Ensure coordinates are valid numbers
+    const isSidebarMatch = matchToSplit.location === "sidebar";
+    const startX = isSidebarMatch ? 0 : (typeof matchToSplit.x === "number" ? matchToSplit.x : 0);
+    const startY = isSidebarMatch ? 0 : (typeof matchToSplit.y === "number" ? matchToSplit.y : 0);
+
+    // Create individual profiles for each person in the match
+    const people = [
+      matchToSplit.person1,
+      matchToSplit.person2,
+      matchToSplit.person3,
+      matchToSplit.person4
+    ].filter(Boolean); // Filter out undefined/null
+
+    const newProfiles = people.map((personName, index) => {
+      // Calculate offset based on index to spread them out
+      // e.g. -120, -40, 40, 120
+      const offset = (index - (people.length - 1) / 2) * 100;
+      
+      return {
+        id: `profile-${nextProfileId + index}`,
+        type: "profile",
+        name: personName,
+        x: isSidebarMatch ? 0 : startX + offset,
+        y: startY,
+        gender: matchToSplit.gender,
+        location: matchToSplit.location || "canvas",
+        notes: matchToSplit[`person${index + 1}Notes`] // Preserve notes
+      };
+    });
+
+    console.log("Creating profiles:", newProfiles);
+
+    // Remove the match and add the new profiles
+    setMatches(matches.filter((m) => m.id !== matchId));
+    setProfiles([...profiles, ...newProfiles]);
+    setNextProfileId(nextProfileId + people.length);
+
+    console.log("Split complete");
   };
 
   const filteredMatches = matches.filter((match) => {
@@ -659,21 +658,42 @@ const ReviewMatches = () => {
         <Link to="/" className="back-link">
           ← Back to Dashboard
         </Link>
-        <button
-          onClick={handleContinueToDorm}
-          style={{
-            padding: "12px 24px",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontSize: "14px",
-            fontWeight: "bold",
-          }}
-        >
-          Continue to Dorm Assignment →
-        </button>
+        
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          {/* Gender Filter Tool moved to header */}
+          <div className="gender-filter-tool">
+            <button
+              className={`gender-btn ${genderFilter === "male" ? "active" : ""}`}
+              onClick={() => setGenderFilter(genderFilter === "male" ? "all" : "male")}
+              title="Filter Male"
+            >
+              ♂
+            </button>
+            <button
+              className={`gender-btn ${genderFilter === "female" ? "active" : ""}`}
+              onClick={() => setGenderFilter(genderFilter === "female" ? "all" : "female")}
+              title="Filter Female"
+            >
+              ♀
+            </button>
+          </div>
+
+          <button
+            onClick={handleContinueToDorm}
+            style={{
+              padding: "12px 24px",
+              backgroundColor: "#4CAF50",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontSize: "14px",
+              fontWeight: "bold",
+            }}
+          >
+            Continue to Dorm Assignment →
+          </button>
+        </div>
       </div>
 
       <div className="split-layout">
@@ -694,7 +714,7 @@ const ReviewMatches = () => {
                   onDrag={handleMatchDrag}
                   onStop={handleMatchStop}
                   onClick={() => handleMatchSplit(match.id)}
-                  isScissorMode={scissorMode}
+                  isScissorMode={false} // No longer needed
                   isStatic={false}
                   isSelected={selectedMatches.includes(match.id)}
                   onToggleSelect={toggleMatchSelection}
@@ -708,7 +728,11 @@ const ReviewMatches = () => {
                 <ProfileCard
                   profile={profile}
                   defaultPosition={{ x: 0, y: 0 }}
-                  onStop={() => {}} // Disable drag/drop in sidebar for now
+                  onStart={handleProfileDragStart}
+                  onStop={(id, data) => {
+                    handleProfileStop(id, data);
+                    handleProfileDragEnd();
+                  }}
                 />
               </div>
             ))}
@@ -718,7 +742,7 @@ const ReviewMatches = () => {
         {/* Right Canvas */}
         <div className="canvas-section">
           <div className="canvas-header">
-            <h2>Saved</h2>
+            <h2>Workspace</h2>
             <div className="search-bar">
               <Search size={20} />
               <input
@@ -742,7 +766,7 @@ const ReviewMatches = () => {
                 onDrag={handleMatchDrag}
                 onStop={handleMatchStop}
                 onClick={() => handleMatchSplit(match.id)}
-                isScissorMode={scissorMode}
+                isScissorMode={false} // No longer needed
                 isHighlighted={recommendedMatchIds.includes(match.id)}
                 className="canvas-card"
               />
@@ -762,13 +786,8 @@ const ReviewMatches = () => {
           </div>
         </div>
       </div>
-
-      <Toolbar
-        scissorMode={scissorMode}
-        onToggleScissor={() => setScissorMode(!scissorMode)}
-        genderFilter={genderFilter}
-        onGenderChange={setGenderFilter}
-      />
+      
+      {/* Toolbar removed */}
     </div>
   );
 };

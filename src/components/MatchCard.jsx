@@ -16,12 +16,9 @@ const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorM
   };
 
   const handleDividerClick = (e) => {
-    console.log('Divider clicked, scissorMode:', isScissorMode);
-    if (isScissorMode) {
-      e.stopPropagation();
-      console.log('Calling onClick for match:', match.id);
-      if (onClick) onClick(); // Trigger the scissor action
-    }
+    e.stopPropagation();
+    console.log('Divider clicked, triggering split for match:', match.id);
+    if (onClick) onClick(); // Trigger the split action
   };
 
   const handleContextMenu = (e) => {
@@ -53,7 +50,7 @@ const MatchCard = ({ match, defaultPosition, onDrag, onStop, onClick, isScissorM
           </div>
 
           <div
-            className={`divider ${isScissorMode ? 'scissor-active' : ''}`}
+            className="divider"
             onClick={handleDividerClick}
           />
 
