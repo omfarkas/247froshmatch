@@ -45,23 +45,25 @@ function RoommateIndex() {
       <div className="roommate-page roommate-finished">
         <div className="finished-content">
           <h1>You finished reviewing matches!</h1>
-          <p style={{ marginBottom: '20px', color: '#666' }}>
+          <p style={{ marginBottom: "20px", color: "#666" }}>
             {DEMO_MATCHES.length} pairs reviewed
           </p>
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+          <div
+            style={{ display: "flex", gap: "10px", justifyContent: "center" }}
+          >
             <Link to="/" className="back-link">
               ← Back to Dashboard
             </Link>
             <button
-              onClick={() => navigate('/review-matches')}
+              onClick={() => navigate("/review-matches")}
               style={{
-                padding: '10px 20px',
-                backgroundColor: '#4CAF50',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontSize: '16px',
+                padding: "10px 20px",
+                backgroundColor: "#4CAF50",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "16px",
               }}
             >
               Continue to Review Matches →
@@ -72,18 +74,37 @@ function RoommateIndex() {
     );
   }
 
+  const progressPercent = (currentPairIndex / DEMO_MATCHES.length) * 100;
+
   return (
     <div className="roommate-page">
-      <Link to="/" className="back-link">
-        ← Back to Dashboard
-      </Link>
+      <div className="roommate-top-bar">
+        <Link to="/" className="back-link">
+          ← Back to Dashboard
+        </Link>
+        <div className="progress-circle-container">
+          <svg className="progress-circle" viewBox="0 0 36 36">
+            <path
+              className="progress-circle-bg"
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+            />
+            <path
+              className="progress-circle-fill"
+              strokeDasharray={`${progressPercent}, 100`}
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+            />
+          </svg>
+          <span className="progress-circle-text">
+            {currentPairIndex}/{DEMO_MATCHES.length}
+          </span>
+        </div>
+      </div>
 
       <header className="roommate-header">
         <h1>These students have compatible living habits.</h1>
         <p className="roommate-subheader">
-          View their full profiles:{" "}
           <button className="see-all-info-btn" onClick={handleOpenModal}>
-            see all info
+            View their full profiles
           </button>
         </p>
       </header>
@@ -135,20 +156,6 @@ function RoommateIndex() {
         <button className="skip-btn" onClick={handleNextPair}>
           Save for Later
         </button>
-      </div>
-
-      <div className="progress-section">
-        <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{
-              width: `${(currentPairIndex / DEMO_MATCHES.length) * 100}%`,
-            }}
-          />
-        </div>
-        <div className="progress-text">
-          {currentPairIndex} of {DEMO_MATCHES.length} Matches Reviewed
-        </div>
       </div>
 
       {isModalOpen && (

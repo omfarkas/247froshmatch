@@ -108,6 +108,30 @@ function formatValue(value) {
   return value;
 }
 
+// Check if two values differ significantly
+function hasSignificantDifference(val1, val2) {
+  // Skip if either value is empty
+  if (val1 === undefined || val1 === null || val1 === "") return false;
+  if (val2 === undefined || val2 === null || val2 === "") return false;
+
+  // For numeric values (1-5 scale), difference of 2+ is significant
+  const num1 = Number(val1);
+  const num2 = Number(val2);
+  if (!isNaN(num1) && !isNaN(num2)) {
+    return Math.abs(num1 - num2) >= 2;
+  }
+
+  // For non-numeric values, any difference is significant
+  return val1 !== val2;
+}
+
+// Check if a category has significant differences
+function categoryHasSignificantDifference(category, student1, student2) {
+  return category.fields.some((field) =>
+    hasSignificantDifference(student1[field.key], student2[field.key])
+  );
+}
+
 function ComparisonModal({ student1, student2, onClose }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -136,25 +160,50 @@ function ComparisonModal({ student1, student2, onClose }) {
         </div>
 
         <div className="modal-content">
-          {FIELD_CATEGORIES.map((category) => (
-            <div key={category.title} className="modal-category">
-              <h3 className="modal-category-title">{category.title}</h3>
+          {FIELD_CATEGORIES.map((category) => {
+            const hasDifference = categoryHasSignificantDifference(
+              category,
+              student1,
+              student2
+            );
+            return (
+              <div key={category.title} className="modal-category">
+                <h3
+                  className={`modal-category-title ${
+                    hasDifference ? "modal-category-title--differs" : ""
+                  }`}
+                >
+                  {category.title}
+                </h3>
 
-              <div className="field-cards-list">
-                {category.fields.map((field) => (
-                  <div key={field.key} className="field-card">
-                    <div className="field-value">
-                      {formatValue(student1[field.key])}
-                    </div>
-                    <div className="field-label">{field.label}</div>
-                    <div className="field-value">
-                      {formatValue(student2[field.key])}
-                    </div>
-                  </div>
-                ))}
+                <div className="field-cards-list">
+                  {category.fields.map((field) => {
+                    const fieldDiffers = hasSignificantDifference(
+                      student1[field.key],
+                      student2[field.key]
+                    );
+                    return (
+                      <div key={field.key} className="field-card">
+                        <div className="field-value">
+                          {formatValue(student1[field.key])}
+                        </div>
+                        <div
+                          className={`field-label ${
+                            fieldDiffers ? "field-label--differs" : ""
+                          }`}
+                        >
+                          {field.label}
+                        </div>
+                        <div className="field-value">
+                          {formatValue(student2[field.key])}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

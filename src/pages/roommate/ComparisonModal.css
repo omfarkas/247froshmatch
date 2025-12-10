@@ -102,6 +102,11 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+.modal-category-title--differs {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
 /* Field Cards List */
 .field-cards-list {
   display: flex;
@@ -129,6 +134,11 @@
   letter-spacing: 0.03em;
 }
 
+.field-label--differs {
+  color: #dc3545;
+  font-weight: 700;
+}
+
 .field-value {
   font-size: 0.95rem;
   color: var(--color-text-primary);
@@ -148,21 +158,21 @@
   .modal-container {
     max-height: 95vh;
   }
-  
+
   .modal-header {
     padding: var(--spacing-md);
   }
-  
+
   .modal-header-student h2 {
     font-size: 1.1rem;
   }
-  
+
   .field-card {
     grid-template-columns: 1fr;
     gap: var(--spacing-xs);
     text-align: center;
   }
-  
+
   .field-value:first-child,
   .field-value:last-child {
     text-align: center;
