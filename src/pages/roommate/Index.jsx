@@ -79,7 +79,7 @@ function RoommateIndex() {
   return (
     <div className="roommate-page">
       <div className="roommate-top-bar">
-        <Link to="/" className="back-link">
+        <Link to="/">
           ← Back to Dashboard
         </Link>
         <div className="progress-circle-container">

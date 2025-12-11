@@ -539,20 +539,33 @@ const ReviewMatches = () => {
 
   return (
     <div className="review-matches-container">
-      <div
-        style={{
-          padding: "20px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Link to="/" className="back-link">
-          ← Back to Dashboard
-        </Link>
-
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          {/* Gender Filter Tool moved to header */}
+      {/* Header matching the split layout below */}
+      <div style={{ display: "flex" }}>
+        {/* Left header - matches sidebar width */}
+        <div
+          style={{
+            width: "350px",
+            padding: "20px var(--page-margin)",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Link to="/" className="back-link">
+            ← Back to Dashboard
+          </Link>
+        </div>
+        
+        {/* Right header - matches canvas section */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: "1rem",
+          }}
+        >
+          {/* Gender Filter Tool */}
           <div className="gender-filter-tool">
             <button
               className={`gender-btn ${
@@ -579,17 +592,8 @@ const ReviewMatches = () => {
           </div>
 
           <button
+            className="continue-btn"
             onClick={handleContinueToDorm}
-            style={{
-              padding: "12px 24px",
-              backgroundColor: "#4CAF50",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: "bold",
-            }}
           >
             Continue to Dorm Assignment →
           </button>
@@ -601,9 +605,6 @@ const ReviewMatches = () => {
         <div className="sidebar-area">
           <div className="sidebar-header">
             <h2>Matches</h2>
-            <button className="filter-icon-btn">
-              <SlidersHorizontal size={20} />
-            </button>
           </div>
           <div className="sidebar-content">
             {sidebarMatches.map((match) => (
@@ -653,9 +654,6 @@ const ReviewMatches = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <button className="filter-icon-btn">
-              <SlidersHorizontal size={20} />
-            </button>
           </div>
 
           <div className="canvas-area">

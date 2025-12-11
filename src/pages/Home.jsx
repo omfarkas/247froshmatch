@@ -109,54 +109,62 @@ function Home() {
 
   return (
     <div className="home-page">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h1 className="page-title" style={{ marginBottom: 0 }}>Welcome back, Resident Director</h1>
-        <button
-          onClick={resetStages}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#f44336',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontSize: '14px',
-          }}
-        >
-          Reset Demo
-        </button>
-      </div>
+      <div className="grid-container">
+        <div className="col-span-12" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+          <h1 className="page-title" style={{ marginBottom: 0, textAlign: 'left' }}>Welcome back, Resident Director</h1>
+          <button
+            onClick={resetStages}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#f44336',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}
+          >
+            Reset Demo
+          </button>
+        </div>
 
-      <div className="card-grid">
-        <DashboardCard
-          title="Roommate Matching"
-          icon={<RoommateIcon />}
-          current={DEMO_DATA.roommate.current}
-          total={DEMO_DATA.roommate.total}
-          to="/roommate"
-          locked={false}
-          completed={isStageComplete(1)}
-        />
+        <div className="col-span-12 card-grid" style={{ maxWidth: 'none', margin: 0, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'var(--grid-gutter)' }}>
+          <div className="col-span-4">
+            <DashboardCard
+              title="Roommate Matching"
+              icon={<RoommateIcon />}
+              current={DEMO_DATA.roommate.current}
+              total={DEMO_DATA.roommate.total}
+              to="/roommate"
+              locked={false}
+              completed={isStageComplete(1)}
+            />
+          </div>
 
-        <DashboardCard
-          title="Match Review"
-          icon={<ReviewIcon />}
-          current={DEMO_DATA.review.current}
-          total={DEMO_DATA.review.total}
-          to="/review-matches"
-          locked={!canAccessStage(2)}
-          completed={isStageComplete(2)}
-        />
+          <div className="col-span-4">
+            <DashboardCard
+              title="Match Review"
+              icon={<ReviewIcon />}
+              current={DEMO_DATA.review.current}
+              total={DEMO_DATA.review.total}
+              to="/review-matches"
+              locked={!canAccessStage(2)}
+              completed={isStageComplete(2)}
+            />
+          </div>
 
-        <DashboardCard
-          title="Dorm Assignment"
-          icon={<DormIcon />}
-          current={DEMO_DATA.dorm.current}
-          total={DEMO_DATA.dorm.total}
-          to="/dorm"
-          locked={!canAccessStage(3)}
-          completed={isStageComplete(3)}
-        />
+          <div className="col-span-4">
+            <DashboardCard
+              title="Dorm Assignment"
+              icon={<DormIcon />}
+              current={DEMO_DATA.dorm.current}
+              total={DEMO_DATA.dorm.total}
+              to="/dorm"
+              locked={!canAccessStage(3)}
+              completed={isStageComplete(3)}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
